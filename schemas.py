@@ -37,7 +37,7 @@ class EjercicioLeer(BaseModel):
     principal: bool
     nota: str
     referencia: str
-    imagen: Optional[str]
+    img_v: str = ""                    # la foto se pide aparte (ver /api/imagenes)
 
 
 class SerieEntrada(BaseModel):
@@ -51,6 +51,7 @@ class SerieEntrada(BaseModel):
 class SesionCrear(BaseModel):
     dia: int = Field(ge=1, le=3)
     fecha: Optional[date] = None
+    cliente: Optional[str] = Field(default=None, max_length=40)
     series: List[SerieEntrada] = Field(min_length=1, max_length=300)
 
 
@@ -117,5 +118,7 @@ class Alerta(BaseModel):
 
 class Inicio(BaseModel):
     ejercicios: List[EjercicioLeer]
-    ultimas: dict                      # {"1": {ejercicio_id: [series]}, ...} sesión anterior de cada día
+    ultimas: dict                      # sesión anterior de cada día
     alertas: List[Alerta]
+    progreso: dict                     # recuperación + recomendaciones + puntos para las gráficas
+    sesiones: List[SesionResumen]

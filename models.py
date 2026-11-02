@@ -19,6 +19,7 @@ class Ejercicio(Base):
     nota = Column(String(200), nullable=False, default="")
     referencia = Column(String(300), nullable=False, default="")  # historial previo escrito a mano
     imagen = Column(Text, nullable=True)                       # foto en base64 (la reduce el celular antes de subirla)
+    img_v = Column(String(8), nullable=False, default="")      # huella de la foto: el celular solo la descarga si cambió
     activo = Column(Boolean, nullable=False, default=True)
 
 
@@ -30,6 +31,7 @@ class Sesion(Base):
     fecha = Column(Date, nullable=False, index=True)
     dia = Column(Integer, nullable=False, index=True)
     nota = Column(String(200), nullable=False, default="")
+    cliente = Column(String(40), nullable=True, index=True)    # id creado por el celular: evita duplicar si se reenvía
     creado = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     series = relationship("Serie", cascade="all, delete-orphan", order_by="Serie.id", lazy="selectin")
 

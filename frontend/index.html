@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1f8a5b">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Gimnasio</title>
 <style>
 :root{--bg:#f4f6f2;--card:#fff;--ink:#1b2a22;--suave:#65756c;--linea:#e2e8e3;--verde:#1f8a5b;--verde-osc:#176b47;--verde-claro:#e3f3ea;--naranja:#d9822b;--naranja-claro:#fbeede;--rojo:#c4443a;--sombra:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05)}
@@ -14,7 +17,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:
 header{position:sticky;top:0;z-index:5;background:var(--verde);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 .barra{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
 header h1{font-size:1.2rem;font-weight:800}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(3,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
 nav button{background:none;border:0;font:inherit;color:var(--suave);padding:8px 4px;border-radius:12px;cursor:pointer;display:grid;gap:2px;justify-items:center;min-height:52px}
 nav button span{font-size:1.3rem;line-height:1}nav button small{font-weight:700;font-size:.78rem}
 nav button[aria-current="true"]{color:var(--verde-osc);background:var(--verde-claro)}
@@ -67,6 +70,17 @@ dialog::backdrop{background:rgba(0,0,0,.55)}.dlg{padding:20px}.dlg h2{font-size:
 .avisos{position:fixed;left:12px;right:12px;top:calc(70px + env(safe-area-inset-top));z-index:30;display:grid;gap:8px;max-width:520px;margin:0 auto;pointer-events:none}
 .aviso{background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-weight:600;box-shadow:var(--sombra)}.aviso.error{background:var(--rojo);color:#fff}
 .cargando{text-align:center;color:var(--suave);padding:40px 0}
+.aviso-r{border-radius:14px;padding:12px 14px;margin:12px 0;border-left:5px solid var(--verde);background:var(--verde-claro);font-size:.95rem}
+.aviso-r.atencion{border-color:var(--naranja);background:var(--naranja-claro)}.aviso-r.alta{border-color:var(--rojo);background:var(--naranja-claro)}
+.rec{margin-top:8px;font-size:.88rem;background:var(--verde-claro);border-radius:10px;padding:8px 10px}
+.t2{font-size:1.02rem;margin-bottom:10px}.expl{font-size:.86rem;color:var(--suave);margin-top:8px}
+.apil{display:flex;gap:6px;height:150px;align-items:stretch}.apil .col{flex:1;display:flex;flex-direction:column;min-width:0}
+.apil .seg{flex:1;display:flex;flex-direction:column;justify-content:flex-end;border-bottom:1px solid var(--linea)}.apil .seg i{display:block;width:100%;max-width:26px;margin:0 auto;min-height:0}
+.apil .seg i:first-child{border-radius:6px 6px 0 0}.apil small{text-align:center;font-size:.62rem;color:var(--suave);margin-top:3px}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.8rem;color:var(--suave);font-weight:600}.leyenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.fechas{display:flex;gap:5px;margin-top:3px}.fechas span{flex:1;text-align:center;font-size:.6rem;color:var(--suave)}
+.recfila{border-top:1px solid var(--linea);padding:12px 0}.recfila:first-of-type{border-top:0}
+details>summary{list-style:none}details>summary::before{content:"▸ "}details[open]>summary::before{content:"▾ "}
 </style>
 </head>
 <body>
@@ -80,7 +94,8 @@ dialog::backdrop{background:rgba(0,0,0,.55)}.dlg{padding:20px}.dlg h2{font-size:
 <main id="vista"><p class="cargando">Cargando tu rutina…</p></main>
 <nav aria-label="Secciones">
   <button data-v="entrenar" aria-current="true"><span>⚡</span><small>Entrenar</small></button>
-  <button data-v="historial" aria-current="false"><span>📈</span><small>Historial</small></button>
+  <button data-v="progreso" aria-current="false"><span>📈</span><small>Progreso</small></button>
+  <button data-v="historial" aria-current="false"><span>🕘</span><small>Historial</small></button>
   <button data-v="rutina" aria-current="false"><span>🗂️</span><small>Rutina</small></button>
 </nav>
 <input type="file" id="archivo" accept="image/*" hidden>
@@ -102,59 +117,90 @@ const EMO={Pecho:"🏋️",Espalda:"🧗",Hombro:"🤸","Bíceps":"💪","Tríce
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=n=>Number.isInteger(+n)?String(n):(+n).toFixed(1).replace(/\.0$/,"");
 const fechaTxt=f=>new Date(f+"T12:00:00").toLocaleDateString("es",{weekday:"short",day:"numeric",month:"short"});
+const corto=f=>f.slice(8,10)+"/"+f.slice(5,7);
+const hoyCol=()=>new Date(Date.now()-5*36e5).toISOString().slice(0,10);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const ls=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k));v===null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}};
-const S={clave:localStorage.getItem("clave")||"",vista:"entrenar",dia:+(ls("gym_dia")||1),ej:[],ultimas:{},alertas:[],draft:ls("gym_draft")||{},res:null,filtro:0,sesiones:null,prog:null};
+const cola=()=>ls("gym_cola")||[];
+const S={clave:localStorage.getItem("clave")||"",vista:"entrenar",dia:+(ls("gym_dia")||1),ej:[],ultimas:{},alertas:[],pg:null,ses:null,draft:ls("gym_draft")||{},res:null,filtro:0,pdia:0,pej:0,imgs:{},sinRed:false};
 
-function aviso(t,tipo){const e=document.createElement("div");e.className="aviso "+(tipo||"");e.textContent=t;$("avisos").append(e);setTimeout(()=>e.remove(),3200)}
+function aviso(t,tipo){const e=document.createElement("div");e.className="aviso "+(tipo||"");e.textContent=t;$("avisos").append(e);setTimeout(()=>e.remove(),3400)}
 async function api(ruta,op){op=op||{};let r;
   try{r=await fetch("/api"+ruta,{method:op.method||"GET",headers:{"Content-Type":"application/json","X-Clave":S.clave},body:op.body?JSON.stringify(op.body):undefined})}
-  catch(e){throw new Error("No hay conexión con el servidor. Inténtalo de nuevo.")}
+  catch(e){const x=new Error("Sin conexión con el servidor.");x.red=true;throw x}
   if(r.status===401){$("acceso").hidden=false;$("errorAcceso").textContent=S.clave?"Clave incorrecta":"";throw new Error("clave")}
   if(r.status===204)return null;const d=await r.json().catch(()=>({}));
   if(!r.ok){let m=d.detail;if(Array.isArray(m))m="Revisa los datos que escribiste.";throw new Error(m||"Algo salió mal.")}return d}
-const falla=e=>{if(e.message!=="clave")aviso(e.message,"error")};
+const falla=e=>{if(e.message==="clave")return;if(e.red){S.sinRed=true;aviso("Sin internet. Esto necesita conexión.","error")}else aviso(e.message,"error")};
 
 /* ---------- comparación (misma regla que el servidor) ---------- */
-const kg=(p,u)=>u==="lbs"?p*0.45359237:p, e1=(k,r)=>k*(1+r/30);
+const LB=0.45359237,kg=(p,u)=>u==="lbs"?p*LB:p,e1=(k,r)=>k*(1+r/30);
 function cmpSerie(a,p){if(!p)return"=";const pa=+kg(a.peso,a.unidad).toFixed(1),pp=+kg(p.peso,p.unidad).toFixed(1);
   if(pa>=pp&&a.reps>=p.reps)return(pa>pp||a.reps>p.reps)?"+":"=";if(pa>pp)return e1(pa,a.reps)>e1(pp,p.reps)?"+":"-";return"-"}
+function cmpEj(act,prev){if(!prev||!prev.length)return{v:"nuevo",m:act.map(()=>"="),pct:null};
+  const m=act.map((s,i)=>cmpSerie(s,prev[Math.min(i,prev.length-1)])),v=act.length<prev.length||m.includes("-")?"-":m.includes("+")?"+":"=";
+  const vol=a=>a.reduce((t,s)=>t+kg(s.peso,s.unidad)*s.reps,0),vp=vol(prev);return{v,m,pct:vp>0?+((vol(act)-vp)/vp*100).toFixed(1):null}}
 const insignia=v=>v==="+"?'<span class="ins mas">+ Mejora</span>':v==="-"?'<span class="ins menos">− Menor</span>':v==="nuevo"?'<span class="ins nuevo">Nuevo</span>':'<span class="ins ig">= Igual</span>';
 const insMini=v=>v==="+"?'<span class="ins mas">+</span>':v==="-"?'<span class="ins menos">−</span>':'<span class="ins ig">=</span>';
 const serTxt=s=>`${fmt(s.peso)}×${s.reps||"fallo"}${s.rir!=null?" @"+s.rir:""}`;
 
-/* ---------- imágenes ---------- */
+/* ---------- imágenes: se guardan en el teléfono y solo se descargan si cambian ---------- */
+const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open("gym",1);r.onupgradeneeded=()=>r.result.createObjectStore("k");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const idbGet=async k=>{try{const d=await idb();return await new Promise(ok=>{const q=d.transaction("k").objectStore("k").get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})}catch(e){return null}};
+const idbSet=async(k,v)=>{try{const d=await idb();return await new Promise(ok=>{const t=d.transaction("k","readwrite");t.objectStore("k").put(v,k);t.oncomplete=()=>ok();t.onerror=()=>ok()})}catch(e){}};
 const imgDef=m=>"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" fill="#1f8a5b"/><rect width="128" height="128" fill="#0b2a1c" opacity=".35"/><text x="64" y="80" font-size="56" text-anchor="middle">${EMO[m]||"⚡"}</text></svg>`);
-const imgDe=e=>e.imagen||imgDef(e.musculo);
+const imgDe=e=>{const c=S.imgs[e.id];return c&&c.data&&c.v===e.img_v?c.data:imgDef(e.musculo)};
+async function sincImgs(){const v=S.ej.map(e=>e.id+":"+((S.imgs[e.id]||{}).v||"")).join(",");
+  try{const l=await api("/imagenes?v="+encodeURIComponent(v));if(!l.length)return;
+    l.forEach(x=>{if(x.imagen)S.imgs[x.id]={v:x.v,data:x.imagen};else delete S.imgs[x.id]});await idbSet("imgs",S.imgs);render()}catch(e){}}
 function reducir(file,max=360){return new Promise((ok,mal)=>{const im=new Image(),u=URL.createObjectURL(file);
   im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
     c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",.72))};
   im.onerror=()=>mal(new Error("No se pudo leer la foto"));im.src=u})}
 let fotoDe=null;
 $("archivo").onchange=async ev=>{const f=ev.target.files[0];ev.target.value="";if(!f||!fotoDe)return;
-  try{const d=await reducir(f);const e=await api("/ejercicios/"+fotoDe,{method:"PATCH",body:{imagen:d}});
-    S.ej=S.ej.map(x=>x.id===e.id?e:x);aviso("Foto guardada");render()}catch(x){falla(x)}};
+  try{const d=await reducir(f),e=await api("/ejercicios/"+fotoDe,{method:"PATCH",body:{imagen:d}});
+    S.ej=S.ej.map(x=>x.id===e.id?e:x);S.imgs[e.id]={v:e.img_v,data:d};await idbSet("imgs",S.imgs);guardarCache();aviso("Foto guardada");render()}catch(x){falla(x)}};
 
-/* ---------- borrador del entrenamiento (sobrevive si cierras la app) ---------- */
+/* ---------- borrador (sobrevive si cierras la app) ---------- */
+const aUni=(s,e)=>+(e.unidad===s.unidad?s.peso:e.unidad==="lbs"?kg(s.peso,s.unidad)/LB:kg(s.peso,s.unidad)).toFixed(2);
 function borrador(){const k=S.dia;S.draft[k]=S.draft[k]||{};const prev=(S.ultimas[k]||{}).ejercicios||{};
   S.ej.filter(e=>e.dia===k).forEach(e=>{if(!S.draft[k][e.id]){const p=prev[e.id];
-    S.draft[k][e.id]={omitir:false,series:(p&&p.length?p:[{peso:0,reps:0,rir:null}]).map(s=>({peso:kg(s.peso,s.unidad)/(e.unidad==="lbs"?0.45359237:1),reps:s.reps,rir:s.rir,nota:""})).map(s=>({...s,peso:+(+s.peso).toFixed(2)}))}}});
+    S.draft[k][e.id]={omitir:false,series:(p&&p.length?p:[{peso:0,reps:0,rir:null,unidad:e.unidad}]).map(s=>({peso:aUni(s,e),reps:s.reps,rir:s.rir,nota:""}))}}});
   return S.draft[k]}
 const guardarBorrador=()=>ls("gym_draft",S.draft);
+const guardarCache=()=>ls("gym_inicio",{ej:S.ej,ultimas:S.ultimas,alertas:S.alertas,pg:S.pg,ses:S.ses});
+const recDe=id=>S.pg&&S.pg.ejercicios.find(x=>x.id===id);
+
+/* ---------- gráficas ---------- */
+function lineaSVG(p){if(!p.length)return"";const W=320,H=165,a=28,b=22,mn=Math.min(...p.map(q=>q.y)),mx=Math.max(...p.map(q=>q.y)),r=(mx-mn)||1;
+  const X=i=>p.length===1?W/2:a+i*(W-2*a)/(p.length-1),Y=v=>H-b-((v-mn)/r)*(H-b-34),sh=i=>p.length<=7||(p.length-1-i)%2===0;
+  return`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Gráfica de fuerza estimada"><path d="${p.map((q,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(q.y).toFixed(1)).join(" ")}" fill="none" stroke="var(--verde)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  ${p.map((q,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(q.y).toFixed(1)}" r="5" fill="${q.mal?"var(--naranja)":"var(--verde)"}"/>${sh(i)?`<text x="${X(i).toFixed(1)}" y="${(Y(q.y)-10).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--ink)">${fmt(q.y)}</text><text x="${X(i).toFixed(1)}" y="${H-5}" text-anchor="middle" font-size="9" fill="var(--suave)">${q.x}</text>`:""}`).join("")}</svg>`}
+function apilado(l){if(!l.length)return'<p class="suave">Todavía no hay entrenamientos de este día.</p>';
+  const tot=s=>s.resumen.mejoraron+s.resumen.iguales+s.resumen.empeoraron,mx=Math.max(...l.map(tot),1);
+  return`<div class="apil">${l.map(s=>{const R=s.resumen,t=tot(s);return`<div class="col" title="${corto(s.fecha)}: ${R.mejoraron} mejoraron, ${R.iguales} iguales, ${R.empeoraron} bajaron"><div class="seg">${t?`<i style="height:${R.empeoraron/mx*100}%;background:var(--naranja)"></i><i style="height:${R.iguales/mx*100}%;background:var(--linea)"></i><i style="height:${R.mejoraron/mx*100}%;background:var(--verde)"></i>`:'<i style="height:4px;background:var(--suave)"></i>'}</div><small>${corto(s.fecha)}</small></div>`}).join("")}</div>
+  <div class="leyenda"><span><i style="background:var(--verde)"></i>Mejoraron</span><span><i style="background:var(--linea)"></i>Iguales</span><span><i style="background:var(--naranja)"></i>Bajaron</span></div>`}
+function barrasVol(p){const mx=Math.max(...p.map(x=>x.volumen),1);
+  return`<div class="barras" style="margin-top:22px">${p.map(x=>`<i style="height:${Math.max(4,x.volumen/mx*100)}%"><b>${x.volumen>=1000?(x.volumen/1000).toFixed(1)+"k":x.volumen}</b></i>`).join("")}</div><div class="fechas">${p.map(x=>`<span>${corto(x.fecha)}</span>`).join("")}</div>`}
 
 /* ---------- vistas ---------- */
+function bannerHoy(){const R=S.pg&&S.pg.recuperacion;if(!R)return"";
+  return`<div class="aviso-r ${R.nivel}"><b>${esc(R.hoy.mensaje)}</b>${R.nivel!=="bien"?`<br><span style="font-size:.9rem">${esc(R.texto)}</span>`:""}<br><button class="enlace" data-act="verprog" style="font-size:.88rem">Ver mi recuperación y progreso</button></div>`}
+function estadoRed(){const n=cola().length;return(S.sinRed||n)?`<div class="aviso-r atencion" style="font-size:.9rem">${S.sinRed?"Sin internet: puedes entrenar normal, todo se guarda en tu teléfono.":""}${n?` ${n} entrenamiento(s) por subir: se envían solos cuando haya conexión.`:""}</div>`:""}
 function vEntrenar(){const d=borrador(),lista=S.ej.filter(e=>e.dia===S.dia),u=S.ultimas[S.dia]||{};
-  const al=S.alertas.length?`<div class="alerta"><b>Alerta de fatiga acumulada:</b> se sugiere una semana de descarga (deload al 50% de volumen) o 3-5 días de descanso completo para recuperar el SNC y evitar estancamiento.<br><span class="suave">${S.alertas.map(a=>esc(a.nombre)+": "+esc(a.motivo)).join(" · ")}</span></div>`:"";
-  return `<div class="dias" role="group">${[1,2,3].map(n=>`<button class="chip" data-act="dia" data-n="${n}" aria-pressed="${S.dia===n}">${n}. ${DIAS[n]}</button>`).join("")}</div>${al}
+  return`${estadoRed()}<div class="dias" role="group">${[1,2,3].map(n=>`<button class="chip" data-act="dia" data-n="${n}" aria-pressed="${S.dia===n}">${n}. ${DIAS[n]}</button>`).join("")}</div>${bannerHoy()}
   <p class="suave" style="margin-bottom:6px">${u.fecha?"Comparando con tu último "+DIAS[S.dia]+": "+fechaTxt(u.fecha):"Aún no tienes un entrenamiento de este día."}</p>
   ${lista.map(e=>cardEj(e,d[e.id],(u.ejercicios||{})[e.id])).join("")||'<p class="cargando">No hay ejercicios en este día. Agrégalos en Rutina.</p>'}
   ${lista.length?'<div class="fin"><button class="btn btn-pri" data-act="terminar">Terminar entrenamiento y comparar</button></div>':""}`}
-function cardEj(e,dr,prev){const paso=e.unidad==="kg"?2.5:5,o=dr.omitir;
+function cardEj(e,dr,prev){const paso=e.unidad==="kg"?2.5:5,o=dr.omitir,rc=recDe(e.id);
   const marca=prev?prev.map(serTxt).join(" · "):"Sin registro";
-  return `<section class="tarjeta ${o?"omitida":""}" data-e="${e.id}">
+  return`<section class="tarjeta ${o?"omitida":""}" data-e="${e.id}">
   <div class="ej-cab"><img src="${esc(imgDe(e))}" alt="${esc(e.nombre)}" data-act="foto" title="Cambiar foto"><div class="grow"><h3>${esc(e.nombre)}</h3><p class="suave" style="font-size:.82rem">${esc(e.musculo)} · ${e.unidad}${e.principal?" · principal":""}</p></div>
   <button class="btn btn-peq" data-act="omitir">${o?"Incluir":"Omitir"}</button></div>
   <p class="meta"><b>Marca a batir (${e.unidad}):</b> ${esc(marca)}${e.referencia?"<br>"+esc(e.referencia):""}${e.nota?"<br>Nota: "+esc(e.nota):""}</p>
-  ${o?"":dr.series.map((s,i)=>{const c=cmpSerie({...s,unidad:e.unidad},prev&&prev[Math.min(i,prev.length-1)]);return `<div class="serie" data-i="${i}">
+  ${rc&&rc.recomendacion.tipo==="subir"?`<p class="rec">💡 ${esc(rc.recomendacion.titulo)} — ${esc(rc.recomendacion.texto)}</p>`:""}
+  ${o?"":dr.series.map((s,i)=>{const c=cmpSerie({...s,unidad:e.unidad},prev&&prev[Math.min(i,prev.length-1)]);return`<div class="serie" data-i="${i}">
    <div class="serie-cab"><span>Serie ${i+1}</span><span>${prev?insMini(c):""} <button class="enlace" data-act="quitar" style="font-weight:600">Quitar</button></span></div>
    <div class="par"><div><small>Peso (${e.unidad})</small><div class="step"><button data-act="w" data-d="${-paso}">−</button><input inputmode="decimal" data-f="peso" value="${fmt(s.peso)}"><button data-act="w" data-d="${paso}">+</button></div></div>
    <div><small>Reps</small><div class="step"><button data-act="r" data-d="-1">−</button><input inputmode="numeric" data-f="reps" value="${s.reps}"><button data-act="r" data-d="1">+</button></div></div></div>
@@ -162,40 +208,67 @@ function cardEj(e,dr,prev){const paso=e.unidad==="kg"?2.5:5,o=dr.omitir;
    <input class="nota" data-f="nota" placeholder="Nota (pausa, drop set…)" value="${esc(s.nota)}"></div>`}).join("")}
   ${o?"":'<button class="btn btn-peq" style="margin-top:10px;width:100%" data-act="mas">+ Agregar serie</button>'}</section>`}
 
-function vResultado(r){const R=r.resumen;
-  const al=(r.alertas||[]).length?`<div class="alerta"><b>Alerta de fatiga acumulada:</b> se sugiere una semana de descarga (deload al 50% de volumen) o 3-5 días de descanso completo para recuperar el SNC y evitar estancamiento.<br><span class="suave">${r.alertas.map(esc).join(" · ")}</span></div>`:"";
-  return `<h2 style="margin:16px 0 2px">${DIAS[r.dia]} · ${fechaTxt(r.fecha)}</h2>
+function vResultado(r){const R=r.resumen,ord={"-":0,"+":1,"=":2,nuevo:3};
+  const al=(r.alertas||[]).length?`<div class="aviso-r alta"><b>Alerta de fatiga acumulada:</b> se sugiere una semana de descarga (deload al 50% de volumen) o 3-5 días de descanso completo para recuperar el SNC y evitar estancamiento.<br><span class="suave">${r.alertas.map(esc).join(" · ")}</span></div>`:"";
+  return`${r.local?'<div class="aviso-r atencion">Guardado en tu teléfono. Se sube solo cuando tengas internet.</div>':""}<h2 style="margin:16px 0 2px">${DIAS[r.dia]} · ${fechaTxt(r.fecha)}</h2>
   <p class="suave">${r.previa_fecha?"Comparado con tu "+DIAS[r.dia]+" del "+fechaTxt(r.previa_fecha):"Es tu primer registro de este día: no hay con qué comparar todavía."}</p>
   <div class="chips"><div class="res mas"><strong>${R.mejoraron}</strong><small>Mejoraron</small></div><div class="res"><strong>${R.iguales}</strong><small>Iguales</small></div><div class="res menos"><strong>${R.empeoraron}</strong><small>Empeoraron</small></div></div>${al}
-  ${r.ejercicios.slice().sort((a,b)=>({"-":0,"+":1,"=":2,nuevo:3}[a.veredicto]-{"-":0,"+":1,"=":2,nuevo:3}[b.veredicto])).map(x=>`<section class="tarjeta"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h3 style="font-size:1rem">${esc(x.nombre)}</h3>${insignia(x.veredicto)}</div>
+  ${r.ejercicios.slice().sort((a,b)=>ord[a.veredicto]-ord[b.veredicto]).map(x=>`<section class="tarjeta"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h3 style="font-size:1rem">${esc(x.nombre)}</h3>${insignia(x.veredicto)}</div>
    ${x.pct_volumen!=null?`<p class="suave" style="font-size:.82rem">Volumen total ${x.pct_volumen>0?"+":""}${x.pct_volumen}%</p>`:""}
-   ${x.series.map((s,i)=>{const p=x.series_previas[Math.min(i,x.series_previas.length-1)];return `<div class="lin"><span>Serie ${i+1} ${x.series_previas.length?insMini(x.marcas[i]):""}</span><span class="num">${p?esc(serTxt(p))+" → ":""}<b>${esc(serTxt(s))}</b> ${x.unidad}</span></div>`}).join("")}
+   ${x.series.map((s,i)=>{const p=x.series_previas[Math.min(i,x.series_previas.length-1)];return`<div class="lin"><span>Serie ${i+1} ${x.series_previas.length?insMini(x.marcas[i]):""}</span><span class="num">${p?esc(serTxt(p))+" → ":""}<b>${esc(serTxt(s))}</b> ${x.unidad}</span></div>`}).join("")}
    ${x.series_previas.length>x.series.length?`<p class="suave" style="font-size:.82rem;margin-top:6px">Hiciste ${x.series.length} series; la vez anterior fueron ${x.series_previas.length}.</p>`:""}</section>`).join("")}
   <button class="btn" style="width:100%" data-act="irhist">Ver historial</button>`}
 
 function vHistorial(){
   if(S.res&&S.vista==="historial")return`<button class="enlace" data-act="volver">← Volver al historial</button>${vResultado(S.res)}<button class="btn btn-pel" style="width:100%;margin-top:10px" data-act="delses" data-id="${S.res.id}">Eliminar este entrenamiento</button>`;
-  if(!S.sesiones)return'<p class="cargando">Cargando…</p>';
-  const l=S.sesiones.filter(s=>!S.filtro||s.dia===S.filtro);
+  if(!S.ses)return'<p class="cargando">Cargando…</p>';
+  const l=S.ses.filter(s=>!S.filtro||s.dia===S.filtro);
   return`<div class="dias"><button class="chip" data-act="filtro" data-n="0" aria-pressed="${!S.filtro}">Todos</button>${[1,2,3].map(n=>`<button class="chip" data-act="filtro" data-n="${n}" aria-pressed="${S.filtro===n}">${DIAS[n]}</button>`).join("")}</div>
   ${l.length?`<div class="lista">${l.map(s=>`<button class="fila" data-act="abrir" data-id="${s.id}"><span><b>${DIAS[s.dia]}</b><br><small class="suave">${fechaTxt(s.fecha)} · ${s.num_ejercicios} ejercicios${s.nota?" · "+esc(s.nota):""}</small></span>
    <span style="text-align:right;font-weight:800" class="num"><span style="color:var(--verde-osc)">▲${s.resumen.mejoraron}</span> <span class="suave">＝${s.resumen.iguales}</span> <span style="color:var(--naranja)">▼${s.resumen.empeoraron}</span></span></button>`).join("")}</div>`:'<p class="cargando">Aún no hay entrenamientos aquí.</p>'}`}
 
+const TIPO={subir:["mas","↑ Sube"],mantener:["ig","= Mantén"],bajar:["menos","↓ Baja"],estancado:["menos","Estancado"],nuevo:["nuevo","Nuevo"]};
+function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termines un entrenamiento verás aquí tu progreso.</p>';
+  const R=P.recuperacion,d=S.pdia||S.dia,exs=P.ejercicios.filter(e=>e.dia===d),ind=R.indicadores||{};
+  const ses=(S.ses||[]).filter(s=>s.dia===d).slice(0,10).reverse(),reales=ses.filter(s=>s.nota!=="Marcas iniciales");
+  const M=reales.reduce((t,s)=>t+s.resumen.mejoraron,0),I=reales.reduce((t,s)=>t+s.resumen.iguales,0),B=reales.reduce((t,s)=>t+s.resumen.empeoraron,0);
+  const ult=reales.length?reales[reales.length-1].resumen:null;
+  const tendencia=!ult?"Todavía no hay entrenamientos con comparación. Después de tu primer entreno aparecerán aquí.":ult.mejoraron>ult.empeoraron?"Tu último entrenamiento fue mejor que el anterior: vas subiendo.":ult.mejoraron<ult.empeoraron?"En tu último entrenamiento bajaron más marcas de las que subieron. Si se repite, revisa descanso y sueño.":"Tu último entrenamiento quedó parecido al anterior: estás estable.";
+  const ord={subir:0,bajar:1,estancado:2,mantener:3,nuevo:4},recs=exs.slice().sort((a,b)=>ord[a.recomendacion.tipo]-ord[b.recomendacion.tipo]);
+  const con=exs.filter(e=>e.puntos.length),sel=con.find(e=>e.id===S.pej)||con[0];
+  return`<div class="aviso-r ${R.nivel}"><h2 style="font-size:1.05rem;margin-bottom:4px">${esc(R.titulo)}</h2><b>${esc(R.hoy.mensaje)}</b><br><span style="font-size:.92rem">${esc(R.texto)}</span>
+   <div class="chips" style="margin-bottom:0"><span class="ins ig">Marcas que bajaron: ${ind.peor_pct??0}%</span><span class="ins ig">Series al fallo: ${ind.rir0_pct??0}%</span><span class="ins ig">Días seguidos: ${ind.dias_seguidos??0}</span></div></div>
+  <div class="dias">${[1,2,3].map(n=>`<button class="chip" data-act="pdia" data-n="${n}" aria-pressed="${d===n}">${DIAS[n]}</button>`).join("")}</div>
+  <section class="tarjeta"><h2 class="t2">¿Voy mejorando en ${DIAS[d]}?</h2>${apilado(ses)}
+   <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: verde si lo mejoraste (más peso o más repeticiones), gris si quedó igual y naranja si bajó. Si con el tiempo ves más verde, estás progresando.</p>
+   ${reales.length?`<p style="margin-top:8px"><b>${M}</b> mejoras · <b>${I}</b> iguales · <b>${B}</b> bajadas en tus últimos ${reales.length} entrenamientos. ${tendencia}</p>`:`<p style="margin-top:8px">${tendencia}</p>`}</section>
+  <section class="tarjeta"><h2 class="t2">Recomendaciones de carga</h2><p class="suave expl">Basadas en tus marcas: si llegas al tope de repeticiones (10 en los principales, 12 en los demás) o terminas con 2 o más repeticiones de reserva, es momento de subir ~5%.</p>
+   ${recs.map(e=>{const r=e.recomendacion,t=TIPO[r.tipo]||TIPO.nuevo;return`<div class="recfila" data-e="${e.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(e.nombre)}</b><span class="ins ${t[0]}">${t[1]}</span></div>
+    <p style="font-size:.9rem;margin-top:4px"><b>${esc(r.titulo)}.</b> ${esc(r.texto)}</p>${e.puntos.length?`<button class="enlace" data-act="verpg" data-id="${e.id}" style="font-size:.88rem">Ver gráfica</button>`:""}</div>`}).join("")||'<p class="suave">Sin ejercicios en este día.</p>'}</section>
+  <section class="tarjeta"><h2 class="t2">Fuerza por ejercicio</h2>
+   ${sel?`<select data-sel="pej" aria-label="Ejercicio">${con.map(e=>`<option value="${e.id}" ${e.id===sel.id?"selected":""}>${esc(e.nombre)}</option>`).join("")}</select>
+   <p style="margin:12px 0 0"><b>Fuerza estimada</b> (${sel.unidad})${sel.cambio_pct!=null?` · <span style="color:${sel.cambio_pct>=0?"var(--verde-osc)":"var(--naranja)"};font-weight:800">${sel.cambio_pct>0?"+":""}${sel.cambio_pct}% desde el inicio</span>`:""}</p>
+   ${lineaSVG(sel.puntos.slice(-10).map(p=>({x:corto(p.fecha),y:p.e1rm,mal:p.veredicto==="-"})))}
+   <p class="suave expl">Es cuánto levantarías en una sola repetición, calculado con peso × (1 + reps ÷ 30). Sirve para comparar días aunque cambies peso y repeticiones. Si la línea sube, estás más fuerte; los puntos naranja son sesiones que bajaron.</p>
+   <p style="margin:14px 0 0"><b>Volumen</b> (peso × repeticiones, ${sel.unidad})</p>${barrasVol(sel.puntos.slice(-10))}
+   <p class="suave expl">Más volumen con buena técnica es más estímulo para crecer. Subir de a poco es mejor que dar saltos grandes.</p>
+   <div class="lista" style="box-shadow:none;border:1px solid var(--linea)">${sel.puntos.slice().reverse().slice(0,6).map(p=>`<div class="fila" style="cursor:default"><span><b>${fechaTxt(p.fecha)}</b><br><small class="suave">${p.series.map(s=>esc(serTxt(s))).join(" · ")} ${sel.unidad}</small></span><span>${insignia(p.veredicto)}</span></div>`).join("")}</div>`:'<p class="suave">Aún no hay registros de este día.</p>'}</section>
+  <details class="tarjeta"><summary style="font-weight:700;cursor:pointer">¿Cómo se calculan los avisos?</summary>
+   <p class="expl" style="margin-top:8px"><b>Subir peso (progresión doble):</b> primero subes repeticiones dentro de un rango; al llegar al tope, subes el peso ~5% (redondeado a la placa más cercana) y vuelves a empezar. También sugiero subir si terminas con 2 o más repeticiones de reserva (RIR).</p>
+   <p class="expl"><b>Descanso:</b> tu ritmo normal es 3 días de entreno y 2 de descanso. Reviso tu último ciclo: si más de ~25% de tus marcas bajan, o casi todas tus series son al fallo, te pido un día extra. Si se acumula más (o 2 ciclos seguidos a la baja, o más de 4 semanas al fallo), te sugiero descarga.</p>
+   <p class="expl"><b>Importante:</b> son guías según tus números, no consejo médico. Si sientes dolor (no solo cansancio), para y consulta a un profesional.</p></details>`}
+
 function vRutina(){
-  if(S.prog){const p=S.prog,mx=Math.max(...p.pts.map(x=>x.mejor_kg),1);
-    return`<button class="enlace" data-act="cerrarprog">← Volver a la rutina</button><h2 style="margin:10px 0">${esc(p.e.nombre)}</h2>
-    <div class="tarjeta"><p class="suave" style="font-size:.85rem">Fuerza estimada (1RM en kg) por entrenamiento</p><div class="barras" style="margin-top:22px">${p.pts.map(x=>`<i class="${x.veredicto==="-"?"menos":""}" style="height:${Math.max(4,x.mejor_kg/mx*100)}%"><b>${fmt(x.mejor_kg)}</b></i>`).join("")||""}</div></div>
-    <div class="lista">${p.pts.slice().reverse().map(x=>`<div class="fila" style="cursor:default"><span><b>${fechaTxt(x.fecha)}</b><br><small class="suave">${x.series.map(s=>esc(serTxt(s))).join(" · ")} ${p.e.unidad}</small></span><span>${insignia(x.veredicto)}</span></div>`).join("")}</div>`}
   return`<div style="display:flex;gap:10px;margin:14px 0"><button class="btn btn-pri" style="flex:1" data-act="nuevoej">+ Agregar ejercicio</button><button class="btn" data-act="exportar">Respaldo</button></div>
   ${[1,2,3].map(n=>`<h2 style="font-size:1rem;margin:18px 0 6px">${n}. ${DIAS[n]}</h2><div class="lista">${S.ej.filter(e=>e.dia===n).map(e=>`<div class="fila" style="grid-template-columns:auto 1fr;align-items:center;cursor:default" data-e="${e.id}">
    <img src="${esc(imgDe(e))}" alt="" data-act="foto" style="width:52px;height:52px;border-radius:12px;object-fit:cover;cursor:pointer"><span><b>${esc(e.nombre)}</b><br><small class="suave">${esc(e.musculo)} · ${e.unidad}</small>
-   <span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-peq" data-act="foto">Foto</button><button class="btn btn-peq" data-act="prog">Progreso</button><button class="btn btn-peq" data-act="editar">Editar</button><button class="btn btn-peq btn-pel" data-act="borrar">Quitar</button></span></span></div>`).join("")||'<p class="suave" style="padding:12px">Sin ejercicios.</p>'}</div>`).join("")}`}
+   <span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-peq" data-act="foto">Foto</button><button class="btn btn-peq" data-act="verpg" data-id="${e.id}">Progreso</button><button class="btn btn-peq" data-act="editar">Editar</button><button class="btn btn-peq btn-pel" data-act="borrar">Quitar</button></span></span></div>`).join("")||'<p class="suave" style="padding:12px">Sin ejercicios.</p>'}</div>`).join("")}`}
 
 function render(){document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===S.vista));
   $("sub").textContent=S.vista==="entrenar"?DIAS[S.dia]:"";
-  $("vista").innerHTML=S.res&&S.vista==="entrenar"?`<button class="enlace" data-act="volver">← Volver a entrenar</button>${vResultado(S.res)}`:S.vista==="entrenar"?vEntrenar():S.vista==="historial"?vHistorial():vRutina()}
+  $("vista").innerHTML=S.res&&S.vista==="entrenar"?`<button class="enlace" data-act="volver">← Volver a entrenar</button>${vResultado(S.res)}`:S.vista==="entrenar"?vEntrenar():S.vista==="progreso"?vProgreso():S.vista==="historial"?vHistorial():vRutina()}
 
-/* ---------- acciones ---------- */
+/* ---------- ejercicio nuevo / editar ---------- */
 let editando=null;
 function abrirEj(e){editando=e||null;$("ejTitulo").textContent=e?"Editar ejercicio":"Agregar ejercicio";$("ejNombre").value=e?e.nombre:"";$("ejMus").value=e?e.musculo:MUS[0];
   $("ejDia").value=e?e.dia:S.dia;$("ejUni").value=e?e.unidad:"kg";$("ejNota").value=e?e.nota:"";$("ejError").textContent="";$("dlgEj").showModal()}
@@ -204,18 +277,35 @@ $("ejCancel").onclick=()=>$("dlgEj").close();
 $("ejOk").onclick=async()=>{const b={nombre:$("ejNombre").value.trim(),musculo:$("ejMus").value,dia:+$("ejDia").value,unidad:$("ejUni").value,nota:$("ejNota").value.trim()};
   if(b.nombre.length<2){$("ejError").textContent="Escribe el nombre del ejercicio";return}
   try{if(editando){const e=await api("/ejercicios/"+editando.id,{method:"PATCH",body:b});S.ej=S.ej.map(x=>x.id===e.id?e:x)}else{S.ej.push(await api("/ejercicios",{method:"POST",body:b}))}
-    S.ej.sort((a,b)=>a.dia-b.dia||a.orden-b.orden||a.id-b.id);$("dlgEj").close();render()}catch(x){if(x.message!=="clave")$("ejError").textContent=x.message}};
+    S.ej.sort((a,b)=>a.dia-b.dia||a.orden-b.orden||a.id-b.id);$("dlgEj").close();guardarCache();render();refrescar()}catch(x){if(x.message!=="clave")$("ejError").textContent=x.red?"Necesitas internet para cambiar la rutina.":x.message}};
 
-async function cargarInicio(){const d=await api("/inicio");S.ej=d.ejercicios;S.ultimas=d.ultimas;S.alertas=d.alertas}
+/* ---------- datos, guardado sin internet y sincronización ---------- */
+async function refrescar(){try{await sincronizar();const d=await api("/inicio");S.sinRed=false;S.ej=d.ejercicios;
+    if(!cola().length){S.ultimas=d.ultimas;S.alertas=d.alertas;S.pg=d.progreso;S.ses=d.sesiones}
+    guardarCache();render();sincImgs()}catch(e){if(e.red){S.sinRed=true;render()}else falla(e)}}
+async function sincronizar(){let q=cola();if(!q.length)return;const resto=[];let ok=0;
+  for(let i=0;i<q.length;i++){try{await api("/sesiones",{method:"POST",body:q[i]});ok++}
+    catch(e){if(e.red||e.message==="clave"){resto.push(...q.slice(i));break}aviso("Un entrenamiento guardado no se pudo subir: "+e.message,"error")}}
+  ls("gym_cola",resto.length?resto:null);if(ok)aviso(ok+" entrenamiento(s) subido(s)")}
+function resultadoLocal(c){const pf=(S.ultimas[c.dia]||{}).fecha||null,prev=(S.ultimas[c.dia]||{}).ejercicios||{},por={};
+  c.series.forEach(s=>{const e=S.ej.find(x=>x.id===s.ejercicio_id);(por[s.ejercicio_id]=por[s.ejercicio_id]||[]).push({...s,unidad:e?e.unidad:"kg"})});
+  const ejercicios=Object.entries(por).map(([id,ss])=>{const p=prev[id],cm=cmpEj(ss,p),e=S.ej.find(x=>x.id==id);
+    return{ejercicio_id:+id,nombre:e?e.nombre:"",unidad:ss[0].unidad,veredicto:cm.v,marcas:cm.m,pct_volumen:cm.pct,series:ss,series_previas:p||[]}});
+  const n=v=>ejercicios.filter(x=>x.veredicto===v).length;
+  S.ultimas[c.dia]={fecha:c.fecha,ejercicios:por};
+  return{id:0,fecha:c.fecha,dia:c.dia,previa_fecha:pf,resumen:{mejoraron:n("+"),iguales:n("="),empeoraron:n("-"),nuevos:n("nuevo")},ejercicios,alertas:[],local:true}}
 async function terminar(){const d=borrador(),series=[];
   S.ej.filter(e=>e.dia===S.dia&&!d[e.id].omitir).forEach(e=>d[e.id].series.forEach(s=>series.push({ejercicio_id:e.id,peso:+s.peso||0,reps:Math.round(+s.reps)||0,rir:s.rir,nota:s.nota||""})));
   if(!series.length)return aviso("No hay series para guardar","error");
   if(!confirm("¿Terminar y guardar este entrenamiento de "+DIAS[S.dia]+"?"))return;
-  try{S.res=await api("/sesiones",{method:"POST",body:{dia:S.dia,series}});delete S.draft[S.dia];guardarBorrador();S.sesiones=null;await cargarInicio();render();scrollTo(0,0)}catch(e){falla(e)}}
-async function irHistorial(){S.vista="historial";S.res=null;render();try{S.sesiones=await api("/sesiones");render()}catch(e){falla(e)}}
+  const c={dia:S.dia,fecha:hoyCol(),cliente:uid(),series};
+  try{S.res=await api("/sesiones",{method:"POST",body:c});S.sinRed=false;delete S.draft[S.dia];guardarBorrador();scrollTo(0,0);render();refrescar()}
+  catch(e){if(!e.red)return falla(e);
+    ls("gym_cola",[...cola(),c]);S.sinRed=true;S.res=resultadoLocal(c);delete S.draft[S.dia];guardarBorrador();guardarCache();scrollTo(0,0);render()}}
+async function irHistorial(){S.vista="historial";S.res=null;render();try{S.ses=await api("/sesiones");guardarCache();render()}catch(e){if(!S.ses)falla(e)}}
 
 document.addEventListener("click",async ev=>{
-  const n=ev.target.closest("nav button");if(n){S.vista=n.dataset.v;S.res=null;S.prog=null;if(S.vista==="historial")return irHistorial();render();return}
+  const n=ev.target.closest("nav button");if(n){S.vista=n.dataset.v;S.res=null;if(S.vista==="historial")return irHistorial();render();scrollTo(0,0);return}
   const t=ev.target.closest("[data-act]");if(!t)return;const a=t.dataset.act;
   const sec=t.closest("[data-e]"),e=sec&&S.ej.find(x=>x.id===+sec.dataset.e);
   const fila=t.closest("[data-i]"),dr=e&&S.draft[S.dia]&&S.draft[S.dia][e.id],s=dr&&fila?dr.series[+fila.dataset.i]:null;
@@ -224,6 +314,9 @@ document.addEventListener("click",async ev=>{
   else if(a==="volver"){S.res=null}
   else if(a==="irhist"){return irHistorial()}
   else if(a==="terminar"){return terminar()}
+  else if(a==="verprog"){S.vista="progreso";S.pdia=0;scrollTo(0,0)}
+  else if(a==="verpg"){const x=S.ej.find(q=>q.id===+t.dataset.id);S.vista="progreso";S.pdia=x?x.dia:S.dia;S.pej=+t.dataset.id;scrollTo(0,0)}
+  else if(a==="pdia"){S.pdia=+t.dataset.n;S.pej=0}
   else if(a==="omitir"){dr.omitir=!dr.omitir;guardarBorrador()}
   else if(a==="w"){s.peso=Math.max(0,+(+s.peso+ +t.dataset.d).toFixed(2));guardarBorrador()}
   else if(a==="r"){s.reps=Math.max(0,(+s.reps||0)+ +t.dataset.d);guardarBorrador()}
@@ -233,24 +326,29 @@ document.addEventListener("click",async ev=>{
   else if(a==="foto"){fotoDe=e.id;$("archivo").click();return}
   else if(a==="filtro"){S.filtro=+t.dataset.n}
   else if(a==="abrir"){S.res=await api("/sesiones/"+t.dataset.id)}
-  else if(a==="delses"){if(!confirm("¿Eliminar este entrenamiento? No se puede deshacer."))return;await api("/sesiones/"+t.dataset.id,{method:"DELETE"});S.res=null;S.sesiones=await api("/sesiones");await cargarInicio()}
+  else if(a==="delses"){if(!confirm("¿Eliminar este entrenamiento? No se puede deshacer."))return;await api("/sesiones/"+t.dataset.id,{method:"DELETE"});S.res=null;await refrescar();S.ses=await api("/sesiones")}
   else if(a==="nuevoej"){return abrirEj()}
   else if(a==="editar"){return abrirEj(e)}
-  else if(a==="borrar"){if(!confirm("¿Quitar "+e.nombre+" de tu rutina? Tu historial se conserva."))return;await api("/ejercicios/"+e.id,{method:"DELETE"});S.ej=S.ej.filter(x=>x!==e)}
-  else if(a==="prog"){S.prog={e,pts:await api("/ejercicios/"+e.id+"/historial")}}
-  else if(a==="cerrarprog"){S.prog=null}
+  else if(a==="borrar"){if(!confirm("¿Quitar "+e.nombre+" de tu rutina? Tu historial se conserva."))return;await api("/ejercicios/"+e.id,{method:"DELETE"});S.ej=S.ej.filter(x=>x!==e);guardarCache();refrescar()}
   else if(a==="exportar"){const d=await api("/exportar"),l=document.createElement("a");l.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));l.download="gimnasio-respaldo.json";l.click()}
   }catch(x){falla(x)}
   render()});
-document.addEventListener("change",ev=>{const t=ev.target;if(!t.dataset.f)return;
-  const sec=t.closest("[data-e]"),fila=t.closest("[data-i]");if(!sec||!fila)return;
+document.addEventListener("change",ev=>{const t=ev.target;
+  if(t.dataset.sel==="pej"){S.pej=+t.value;render();return}
+  if(!t.dataset.f)return;const sec=t.closest("[data-e]"),fila=t.closest("[data-i]");if(!sec||!fila)return;
   const s=S.draft[S.dia][+sec.dataset.e].series[+fila.dataset.i],f=t.dataset.f;
   s[f]=f==="nota"?t.value:Math.max(0,parseFloat(String(t.value).replace(",","."))||0);guardarBorrador();render()});
 
-/* ---------- arranque ---------- */
+/* ---------- arranque: primero lo guardado (instantáneo), luego se actualiza ---------- */
 $("formAcceso").onsubmit=ev=>{ev.preventDefault();S.clave=$("clave").value;localStorage.setItem("clave",S.clave);$("clave").value="";$("acceso").hidden=true;arrancar()};
-async function arrancar(){try{const est=await(await fetch("/api/estado")).json();if(est.requiere_clave&&!S.clave){$("acceso").hidden=false;return}
-  await cargarInicio();render()}catch(e){if(e.message!=="clave")$("vista").innerHTML='<p class="cargando">'+esc(e.message||"No se pudo conectar.")+"</p>"}}
+window.addEventListener("online",()=>{S.sinRed=false;refrescar()});
+window.addEventListener("offline",()=>{S.sinRed=true;render()});
+async function arrancar(){S.imgs=(await idbGet("imgs"))||{};const c=ls("gym_inicio");
+  if(c){S.ej=c.ej||[];S.ultimas=c.ultimas||{};S.alertas=c.alertas||[];S.pg=c.pg||null;S.ses=c.ses||null;render()}
+  try{const est=await(await fetch("/api/estado")).json();if(est.requiere_clave&&!S.clave){$("acceso").hidden=false;return}}catch(e){}
+  await refrescar();
+  if(!S.ej.length)$("vista").innerHTML='<p class="cargando">Conéctate a internet una vez para descargar tu rutina.</p>'}
+if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js").catch(()=>{});
 arrancar();
 </script>
 </body>
