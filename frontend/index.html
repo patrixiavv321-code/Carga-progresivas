@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#09090a">
+<meta name="theme-color" content="#1f8a5b">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Gimnasio</title>
 <style>
-:root{color-scheme:dark;--bg:#09090a;--card:#141416;--ink:#f5f5f6;--suave:#9b9ba3;--linea:#2a2a2f;--verde:#e5161d;--verde-osc:#ff4a50;--verde-claro:#2a1215;--naranja:#b4b4bb;--naranja-claro:#1c1c1f;--rojo:#ff5a5f;--sombra:0 1px 0 rgba(255,255,255,.04),0 10px 30px rgba(0,0,0,.45);--cond:"Bebas Neue",Oswald,"Arial Narrow","sans-serif-condensed",Impact,sans-serif}
+:root{--bg:#f4f6f2;--card:#fff;--ink:#1b2a22;--suave:#65756c;--linea:#e2e8e3;--verde:#1f8a5b;--verde-osc:#176b47;--verde-claro:#e3f3ea;--naranja:#d9822b;--naranja-claro:#fbeede;--rojo:#c4443a;--sombra:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#111815;--card:#1a2420;--ink:#e8f0eb;--suave:#97a89e;--linea:#2a3731;--verde:#2f9f6c;--verde-osc:#3bb67d;--verde-claro:#173a2a;--naranja:#e59a47;--naranja-claro:#3a2a17;--rojo:#ec7a70;--sombra:0 1px 2px rgba(0,0,0,.4)}}
 *{box-sizing:border-box}html,body{margin:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.4;background:var(--bg);color:var(--ink);padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 [hidden]{display:none!important}h1,h2,h3,p{margin:0}.suave{color:var(--suave)}.num{font-variant-numeric:tabular-nums}
@@ -80,54 +81,22 @@ dialog::backdrop{background:rgba(0,0,0,.55)}.dlg{padding:20px}.dlg h2{font-size:
 .fechas{display:flex;gap:5px;margin-top:3px}.fechas span{flex:1;text-align:center;font-size:.6rem;color:var(--suave)}
 .recfila{border-top:1px solid var(--linea);padding:12px 0}.recfila:first-of-type{border-top:0}
 details>summary{list-style:none}details>summary::before{content:"▸ "}details[open]>summary::before{content:"▾ "}
-
-/* ===== Estilo gimnasio: negro, rojo y blanco ===== */
-body{background:radial-gradient(700px 380px at 90% -80px,rgba(229,22,29,.28),transparent 70%),linear-gradient(rgba(229,22,29,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(229,22,29,.07) 1px,transparent 1px) 0 0/44px 44px,var(--bg);background-attachment:fixed}
-h1,h2,h3,.res strong,nav small,.btn,.chip,.ins{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-weight:400}
-h1{font-size:1.6rem}h2{font-size:1.5rem}h3{font-size:1.25rem;line-height:1.1}
-header{background:rgba(9,9,10,.82);backdrop-filter:blur(12px);border-bottom:2px solid var(--verde);box-shadow:0 8px 30px rgba(229,22,29,.25)}
-header h1{display:flex;align-items:center;gap:10px;font-size:1.7rem}
-.logo{display:grid;place-items:center;width:32px;height:32px;background:var(--verde);clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%)}
-.logo svg{width:18px;height:18px;fill:#fff}
-#sub{font-family:var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--verde-osc);opacity:1!important;font-size:1.1rem!important}
-.tarjeta,.lista,.res{position:relative;background:linear-gradient(180deg,#17171a,var(--card));border:1px solid var(--linea);border-radius:8px}
-.tarjeta::before{content:"";position:absolute;left:-1px;top:14px;width:3px;height:30px;background:var(--verde);box-shadow:0 0 12px var(--verde)}
-.btn{border-radius:6px;font-size:1.05rem;background:#1c1c20;transition:transform .12s,box-shadow .2s}.btn:active{transform:scale(.96)}
-.btn-pri{background:linear-gradient(135deg,#ff2a31,var(--verde));border-color:var(--verde);box-shadow:0 6px 22px rgba(229,22,29,.45)}
-.btn-pel{color:var(--rojo)}
-.chip{border-radius:6px;font-size:1.05rem;background:#1c1c20}.chip[aria-pressed="true"]{box-shadow:0 0 16px rgba(229,22,29,.5)}
-input,select{background:#0f0f11;border-radius:6px}input:focus-visible,select:focus-visible{outline:2px solid var(--verde);box-shadow:0 0 0 4px rgba(229,22,29,.2)}
-.serie,.step button,.rir button{background:#0f0f11;border-radius:6px}.rir button[aria-pressed="true"]{box-shadow:0 0 12px rgba(229,22,29,.5)}
-.ej-cab img{border-radius:6px;border:1px solid var(--verde);filter:contrast(1.08) saturate(.9)}
-.res strong{font-size:2.2rem;line-height:1}.res.mas strong{color:var(--verde-osc);text-shadow:0 0 18px rgba(229,22,29,.6)}
-.ins{border-radius:4px;font-size:.95rem;letter-spacing:.08em}.ins.mas{box-shadow:0 0 12px rgba(229,22,29,.55)}
-.alerta,.aviso-r{border-radius:6px;border-left-width:4px}
-.barras i{background:linear-gradient(180deg,#ff3b41,var(--verde));box-shadow:0 0 12px rgba(229,22,29,.45);border-radius:2px 2px 0 0}.barras i.menos{background:#d9d9dc;box-shadow:none}
-.fila{transition:background .15s}.fila:hover{background:#1c1c20}
-nav{background:rgba(9,9,10,.9);backdrop-filter:blur(14px);border-top:1px solid var(--verde);box-shadow:0 -10px 30px rgba(229,22,29,.18)}
-nav button{border-radius:6px;transition:color .2s,background .2s}nav{grid-template-columns:repeat(4,minmax(0,1fr))}nav button{min-width:0;padding:8px 2px}nav button small{font-size:.85rem;letter-spacing:.04em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-nav button[aria-current="true"]{color:#fff;background:linear-gradient(180deg,rgba(229,22,29,.35),rgba(229,22,29,.05));box-shadow:inset 0 2px 0 var(--verde)}
-dialog{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3),0 24px 60px rgba(0,0,0,.6)}dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
-.acceso form{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3)}
-@keyframes entra{from{opacity:0;transform:translateY(8px)}}#vista>*{animation:entra .3s cubic-bezier(.2,.7,.2,1) both}
-@media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="avisos" class="avisos" aria-live="polite"></div>
 <div id="acceso" class="acceso" hidden>
-  <form id="formAcceso"><h1>Gimnasio</h1><p class="suave">Escribe tu clave para entrar.</p>
+  <form id="formAcceso"><h1>🏋️ Gimnasio</h1><p class="suave">Escribe tu clave para entrar.</p>
   <label for="clave">Clave</label><input id="clave" type="password" autocomplete="current-password" required>
   <p id="errorAcceso" class="error" role="alert"></p><button class="btn btn-pri" style="width:100%;margin-top:10px">Entrar</button></form>
 </div>
-<header><div class="barra"><h1><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>Gimnasio</h1><span id="sub" style="font-size:.85rem;opacity:.9"></span></div></header>
+<header><div class="barra"><h1>🏋️ Gimnasio</h1><span id="sub" style="font-size:.85rem;opacity:.9"></span></div></header>
 <main id="vista"><p class="cargando">Cargando tu rutina…</p></main>
 <nav aria-label="Secciones">
-  <button data-v="entrenar" aria-current="true"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><small>Entrenar</small></button>
-  <button data-v="progreso" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg></span><small>Progreso</small></button>
-  <button data-v="historial" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><small>Historial</small></button>
-  <button data-v="rutina" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg></span><small>Rutina</small></button>
+  <button data-v="entrenar" aria-current="true"><span>⚡</span><small>Entrenar</small></button>
+  <button data-v="progreso" aria-current="false"><span>📈</span><small>Progreso</small></button>
+  <button data-v="historial" aria-current="false"><span>🕘</span><small>Historial</small></button>
+  <button data-v="rutina" aria-current="false"><span>🗂️</span><small>Rutina</small></button>
 </nav>
 <input type="file" id="archivo" accept="image/*" hidden>
 
@@ -179,7 +148,7 @@ const serTxt=s=>`${fmt(s.peso)}×${s.reps||"fallo"}${s.rir!=null?" @"+s.rir:""}`
 const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open("gym",1);r.onupgradeneeded=()=>r.result.createObjectStore("k");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 const idbGet=async k=>{try{const d=await idb();return await new Promise(ok=>{const q=d.transaction("k").objectStore("k").get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})}catch(e){return null}};
 const idbSet=async(k,v)=>{try{const d=await idb();return await new Promise(ok=>{const t=d.transaction("k","readwrite");t.objectStore("k").put(v,k);t.oncomplete=()=>ok();t.onerror=()=>ok()})}catch(e){}};
-const imgDef=m=>"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" fill="#e5161d"/><rect width="128" height="128" fill="#0b2a1c" opacity=".35"/><text x="64" y="80" font-size="56" text-anchor="middle">${EMO[m]||"⚡"}</text></svg>`);
+const imgDef=m=>"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" fill="#1f8a5b"/><rect width="128" height="128" fill="#0b2a1c" opacity=".35"/><text x="64" y="80" font-size="56" text-anchor="middle">${EMO[m]||"⚡"}</text></svg>`);
 const imgDe=e=>{const c=S.imgs[e.id];return c&&c.data&&c.v===e.img_v?c.data:imgDef(e.musculo)};
 async function sincImgs(){const v=S.ej.map(e=>e.id+":"+((S.imgs[e.id]||{}).v||"")).join(",");
   try{const l=await api("/imagenes?v="+encodeURIComponent(v));if(!l.length)return;
@@ -271,7 +240,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
    <div class="chips" style="margin-bottom:0"><span class="ins ig">Marcas que bajaron: ${ind.peor_pct??0}%</span><span class="ins ig">Series al fallo: ${ind.rir0_pct??0}%</span><span class="ins ig">Días seguidos: ${ind.dias_seguidos??0}</span></div></div>
   <div class="dias">${[1,2,3].map(n=>`<button class="chip" data-act="pdia" data-n="${n}" aria-pressed="${d===n}">${DIAS[n]}</button>`).join("")}</div>
   <section class="tarjeta"><h2 class="t2">¿Voy mejorando en ${DIAS[d]}?</h2>${apilado(ses)}
-   <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: rojo si lo mejoraste (más peso o más repeticiones), gris oscuro si quedó igual y gris claro si bajó. Si con el tiempo ves más rojo, estás progresando.</p>
+   <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: verde si lo mejoraste (más peso o más repeticiones), gris si quedó igual y naranja si bajó. Si con el tiempo ves más verde, estás progresando.</p>
    ${reales.length?`<p style="margin-top:8px"><b>${M}</b> mejoras · <b>${I}</b> iguales · <b>${B}</b> bajadas en tus últimos ${reales.length} entrenamientos. ${tendencia}</p>`:`<p style="margin-top:8px">${tendencia}</p>`}</section>
   <section class="tarjeta"><h2 class="t2">Recomendaciones de carga</h2><p class="suave expl">Basadas en tus marcas: si llegas al tope de repeticiones (10 en los principales, 12 en los demás) o terminas con 2 o más repeticiones de reserva, es momento de subir ~5%.</p>
    ${recs.map(e=>{const r=e.recomendacion,t=TIPO[r.tipo]||TIPO.nuevo;return`<div class="recfila" data-e="${e.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(e.nombre)}</b><span class="ins ${t[0]}">${t[1]}</span></div>
@@ -280,7 +249,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
    ${sel?`<select data-sel="pej" aria-label="Ejercicio">${con.map(e=>`<option value="${e.id}" ${e.id===sel.id?"selected":""}>${esc(e.nombre)}</option>`).join("")}</select>
    <p style="margin:12px 0 0"><b>Fuerza estimada</b> (${sel.unidad})${sel.cambio_pct!=null?` · <span style="color:${sel.cambio_pct>=0?"var(--verde-osc)":"var(--naranja)"};font-weight:800">${sel.cambio_pct>0?"+":""}${sel.cambio_pct}% desde el inicio</span>`:""}</p>
    ${lineaSVG(sel.puntos.slice(-10).map(p=>({x:corto(p.fecha),y:p.e1rm,mal:p.veredicto==="-"})))}
-   <p class="suave expl">Es cuánto levantarías en una sola repetición, calculado con peso × (1 + reps ÷ 30). Sirve para comparar días aunque cambies peso y repeticiones. Si la línea sube, estás más fuerte; los puntos claros son sesiones que bajaron.</p>
+   <p class="suave expl">Es cuánto levantarías en una sola repetición, calculado con peso × (1 + reps ÷ 30). Sirve para comparar días aunque cambies peso y repeticiones. Si la línea sube, estás más fuerte; los puntos naranja son sesiones que bajaron.</p>
    <p style="margin:14px 0 0"><b>Volumen</b> (peso × repeticiones, ${sel.unidad})</p>${barrasVol(sel.puntos.slice(-10))}
    <p class="suave expl">Más volumen con buena técnica es más estímulo para crecer. Subir de a poco es mejor que dar saltos grandes.</p>
    <div class="lista" style="box-shadow:none;border:1px solid var(--linea)">${sel.puntos.slice().reverse().slice(0,6).map(p=>`<div class="fila" style="cursor:default"><span><b>${fechaTxt(p.fecha)}</b><br><small class="suave">${p.series.map(s=>esc(serTxt(s))).join(" · ")} ${sel.unidad}</small></span><span>${insignia(p.veredicto)}</span></div>`).join("")}</div>`:'<p class="suave">Aún no hay registros de este día.</p>'}</section>

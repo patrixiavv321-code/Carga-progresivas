@@ -1,4 +1,3 @@
-import gzip
 import hashlib
 import hmac
 import os
@@ -7,7 +6,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -117,12 +116,11 @@ def acceso():
 
 
 # ---------- Análisis en memoria (una sola pasada; se recalcula solo cuando algo cambia) ----------
-_cache: dict = {"a": None, "inicio": None}
+_cache: dict = {"a": None}
 
 
 def invalidar() -> None:
     _cache["a"] = None
-    _cache["inicio"] = None
 
 
 def _serie(x: models.Serie) -> dict:
@@ -281,27 +279,14 @@ def imagenes(v: str = "", db: Session = Depends(get_db)):
 
 
 # ---------- Inicio y sesiones ----------
-@api.get("/inicio")
-def inicio(request: Request, db: Session = Depends(get_db)):
-    """Todo lo que la app necesita para arrancar, en una sola petición.
-    La respuesta ya armada se guarda en memoria (hasta que algo cambie o pase la medianoche) y lleva ETag:
-    si el celular ya tiene la última versión, el servidor solo contesta '304 sin cambios' y no manda nada."""
-    clave = hoy()
-    c = _cache["inicio"]
-    if c is None or c[0] != clave:
-        a = _analisis(db)
-        ultimas = {str(d): {"fecha": None, "ejercicios": {}} for d in (1, 2, 3)}
-        for s in a["lista"]:
-            ultimas[str(s["dia"])] = {"fecha": s["fecha"].isoformat(), "ejercicios": {str(k): v for k, v in s["series_por_ejercicio"].items()}}
-        cuerpo = schemas.Inicio(ejercicios=_activos(a), ultimas=ultimas, alertas=a["alertas"], progreso=_progreso(a),
-                                sesiones=_resumen_sesiones(a)).model_dump_json().encode()
-        c = _cache["inicio"] = (clave, cuerpo, '"' + hashlib.md5(cuerpo).hexdigest() + '"', gzip.compress(cuerpo, 6, mtime=0))
-    cab = {"ETag": c[2], "Cache-Control": "no-cache", "Vary": "Accept-Encoding"}
-    if request.headers.get("if-none-match") == c[2]:
-        return Response(status_code=304, headers=cab)
-    if "gzip" in request.headers.get("accept-encoding", ""):             # ya viene comprimida: no se comprime en cada petición
-        return Response(content=c[3], media_type="application/json", headers={**cab, "Content-Encoding": "gzip"})
-    return Response(content=c[1], media_type="application/json", headers=cab)
+@api.get("/inicio", response_model=schemas.Inicio)
+def inicio(db: Session = Depends(get_db)):
+    """Todo lo que la app necesita para arrancar, en una sola petición."""
+    a = _analisis(db)
+    ultimas = {str(d): {"fecha": None, "ejercicios": {}} for d in (1, 2, 3)}
+    for s in a["lista"]:
+        ultimas[str(s["dia"])] = {"fecha": s["fecha"].isoformat(), "ejercicios": {str(k): v for k, v in s["series_por_ejercicio"].items()}}
+    return {"ejercicios": _activos(a), "ultimas": ultimas, "alertas": a["alertas"], "progreso": _progreso(a), "sesiones": _resumen_sesiones(a)}
 
 
 @api.post("/sesiones", response_model=schemas.SesionDetalle, status_code=201)
