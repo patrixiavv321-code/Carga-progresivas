@@ -1,3 +1,4 @@
+import gzip
 import hashlib
 import hmac
 import os
@@ -6,7 +7,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -40,7 +41,7 @@ def huella(imagen: Optional[str]) -> str:
 def migrar() -> None:
     """Agrega columnas nuevas a tablas que ya existen (create_all solo crea tablas nuevas). No borra nada."""
     insp = inspect(engine)
-    pendientes = [("ejercicios", "img_v", "VARCHAR(8) DEFAULT ''"), ("sesiones", "cliente", "VARCHAR(40)")]
+    pendientes = [("ejercicios", "img_v", "VARCHAR(8) DEFAULT ''"), ("ejercicios", "marca", "VARCHAR(300) DEFAULT ''"), ("ejercicios", "n_series", "INTEGER DEFAULT 0"), ("sesiones", "cliente", "VARCHAR(40)")]
     with engine.begin() as con:
         for tabla, col, tipo in pendientes:
             if tabla in insp.get_table_names() and col not in {c["name"] for c in insp.get_columns(tabla)}:
@@ -116,11 +117,12 @@ def acceso():
 
 
 # ---------- Análisis en memoria (una sola pasada; se recalcula solo cuando algo cambia) ----------
-_cache: dict = {"a": None}
+_cache: dict = {"a": None, "inicio": None}
 
 
 def invalidar() -> None:
     _cache["a"] = None
+    _cache["inicio"] = None
 
 
 def _serie(x: models.Serie) -> dict:
@@ -132,7 +134,7 @@ def _analisis(db: Session) -> dict:
     if _cache["a"] is not None:
         return _cache["a"]
     ejs = {e.id: {"id": e.id, "nombre": e.nombre, "musculo": e.musculo, "dia": e.dia, "orden": e.orden, "unidad": e.unidad,
-                  "principal": e.principal, "nota": e.nota, "referencia": e.referencia, "img_v": e.img_v or "", "activo": e.activo}
+                  "principal": e.principal, "nota": e.nota, "referencia": e.referencia, "marca": e.marca or "", "n_series": e.n_series or 0, "img_v": e.img_v or "", "activo": e.activo}
            for e in db.query(models.Ejercicio).options(defer(models.Ejercicio.imagen)).all()}
     sesiones = db.query(models.Sesion).order_by(models.Sesion.fecha, models.Sesion.id).all()
     previa: Dict[int, tuple] = {}
@@ -227,7 +229,7 @@ def crear_ejercicio(datos: schemas.EjercicioCrear, db: Session = Depends(get_db)
     if _nombre_repetido(db, nombre):
         raise HTTPException(status_code=400, detail="Ya tienes un ejercicio con ese nombre")
     ultimo = db.query(func.max(models.Ejercicio.orden)).filter(models.Ejercicio.dia == datos.dia).scalar() or 0
-    nuevo = models.Ejercicio(**{**datos.model_dump(), "nombre": nombre}, orden=ultimo + 1, img_v=huella(datos.imagen))
+    nuevo = models.Ejercicio(**{**datos.model_dump(), "nombre": nombre, "marca": datos.marca.strip()}, orden=ultimo + 1, img_v=huella(datos.imagen))
     db.add(nuevo)
     db.commit()
     invalidar()
@@ -245,6 +247,9 @@ def editar_ejercicio(ejercicio_id: int, datos: schemas.EjercicioEditar, db: Sess
         cambios["nombre"] = cambios["nombre"].strip()
         if _nombre_repetido(db, cambios["nombre"], ignorar=ejercicio_id):
             raise HTTPException(status_code=400, detail="Ya tienes un ejercicio con ese nombre")
+    for k in ("marca", "referencia"):
+        if cambios.get(k) is not None:
+            cambios[k] = cambios[k].strip()
     if "imagen" in cambios:
         _validar_imagen(cambios["imagen"])
         cambios["imagen"] = cambios["imagen"] or None
@@ -279,14 +284,27 @@ def imagenes(v: str = "", db: Session = Depends(get_db)):
 
 
 # ---------- Inicio y sesiones ----------
-@api.get("/inicio", response_model=schemas.Inicio)
-def inicio(db: Session = Depends(get_db)):
-    """Todo lo que la app necesita para arrancar, en una sola petición."""
-    a = _analisis(db)
-    ultimas = {str(d): {"fecha": None, "ejercicios": {}} for d in (1, 2, 3)}
-    for s in a["lista"]:
-        ultimas[str(s["dia"])] = {"fecha": s["fecha"].isoformat(), "ejercicios": {str(k): v for k, v in s["series_por_ejercicio"].items()}}
-    return {"ejercicios": _activos(a), "ultimas": ultimas, "alertas": a["alertas"], "progreso": _progreso(a), "sesiones": _resumen_sesiones(a)}
+@api.get("/inicio")
+def inicio(request: Request, db: Session = Depends(get_db)):
+    """Todo lo que la app necesita para arrancar, en una sola petición.
+    La respuesta ya armada se guarda en memoria (hasta que algo cambie o pase la medianoche) y lleva ETag:
+    si el celular ya tiene la última versión, el servidor solo contesta '304 sin cambios' y no manda nada."""
+    clave = hoy()
+    c = _cache["inicio"]
+    if c is None or c[0] != clave:
+        a = _analisis(db)
+        ultimas = {str(d): {"fecha": None, "ejercicios": {}} for d in (1, 2, 3)}
+        for s in a["lista"]:
+            ultimas[str(s["dia"])] = {"fecha": s["fecha"].isoformat(), "ejercicios": {str(k): v for k, v in s["series_por_ejercicio"].items()}}
+        cuerpo = schemas.Inicio(ejercicios=_activos(a), ultimas=ultimas, alertas=a["alertas"], progreso=_progreso(a),
+                                sesiones=_resumen_sesiones(a)).model_dump_json().encode()
+        c = _cache["inicio"] = (clave, cuerpo, '"' + hashlib.md5(cuerpo).hexdigest() + '"', gzip.compress(cuerpo, 6, mtime=0))
+    cab = {"ETag": c[2], "Cache-Control": "no-cache", "Vary": "Accept-Encoding"}
+    if request.headers.get("if-none-match") == c[2]:
+        return Response(status_code=304, headers=cab)
+    if "gzip" in request.headers.get("accept-encoding", ""):             # ya viene comprimida: no se comprime en cada petición
+        return Response(content=c[3], media_type="application/json", headers={**cab, "Content-Encoding": "gzip"})
+    return Response(content=c[1], media_type="application/json", headers=cab)
 
 
 @api.post("/sesiones", response_model=schemas.SesionDetalle, status_code=201)

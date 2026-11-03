@@ -17,6 +17,8 @@ class Ejercicio(Base):
     unidad = Column(String(3), nullable=False, default="kg")   # kg | lbs
     principal = Column(Boolean, nullable=False, default=False) # cuenta para la alerta de fatiga
     nota = Column(String(200), nullable=False, default="")
+    n_series = Column(Integer, nullable=False, default=0)           # series que haces en este ejercicio (0 = automático: las de tu último entrenamiento)
+    marca = Column(String(300), nullable=False, default="")        # marca a batir escrita a mano (vacío = usar el último entrenamiento)
     referencia = Column(String(300), nullable=False, default="")  # historial previo escrito a mano
     imagen = Column(Text, nullable=True)                       # foto en base64 (la reduce el celular antes de subirla)
     img_v = Column(String(8), nullable=False, default="")      # huella de la foto: el celular solo la descarga si cambió

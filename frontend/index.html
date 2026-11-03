@@ -3,14 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1f8a5b">
+<meta name="theme-color" content="#09090a">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Gimnasio</title>
 <style>
-:root{--bg:#f4f6f2;--card:#fff;--ink:#1b2a22;--suave:#65756c;--linea:#e2e8e3;--verde:#1f8a5b;--verde-osc:#176b47;--verde-claro:#e3f3ea;--naranja:#d9822b;--naranja-claro:#fbeede;--rojo:#c4443a;--sombra:0 1px 2px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05)}
-@media(prefers-color-scheme:dark){:root{--bg:#111815;--card:#1a2420;--ink:#e8f0eb;--suave:#97a89e;--linea:#2a3731;--verde:#2f9f6c;--verde-osc:#3bb67d;--verde-claro:#173a2a;--naranja:#e59a47;--naranja-claro:#3a2a17;--rojo:#ec7a70;--sombra:0 1px 2px rgba(0,0,0,.4)}}
+:root{color-scheme:dark;--bg:#09090a;--card:#141416;--ink:#f5f5f6;--suave:#9b9ba3;--linea:#2a2a2f;--verde:#e5161d;--verde-osc:#ff4a50;--verde-claro:#2a1215;--naranja:#b4b4bb;--naranja-claro:#1c1c1f;--rojo:#ff5a5f;--sombra:0 1px 0 rgba(255,255,255,.04),0 10px 30px rgba(0,0,0,.45);--cond:"Bebas Neue",Oswald,"Arial Narrow","sans-serif-condensed",Impact,sans-serif}
 *{box-sizing:border-box}html,body{margin:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.4;background:var(--bg);color:var(--ink);padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 [hidden]{display:none!important}h1,h2,h3,p{margin:0}.suave{color:var(--suave)}.num{font-variant-numeric:tabular-nums}
@@ -37,7 +36,7 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid 
 .ej-cab{display:flex;gap:12px;align-items:center}
 .ej-cab img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none;background:var(--verde-claro);cursor:pointer}
 .ej-cab h3{font-size:1.02rem;line-height:1.2}.ej-cab .grow{flex:1;min-width:0}
-.meta{font-size:.82rem;color:var(--suave);margin-top:8px}.meta b{color:var(--ink)}
+.ult{display:grid;gap:2px;margin-top:6px;padding:6px 8px;border-left:2px solid var(--verde);background:#0f0f11;border-radius:0 6px 6px 0}.ult small{color:var(--suave);line-height:1.25}.ult small:first-child{color:var(--ink)}.ult b{color:var(--verde-osc);font-weight:700}.meta i{color:var(--verde-osc);font-style:normal;font-size:.75rem}.meta{font-size:.82rem;color:var(--suave);margin-top:8px}.meta b{color:var(--ink)}
 .serie{background:var(--bg);border-radius:14px;padding:10px;margin-top:10px}
 .serie-cab{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;font-size:.92rem}
 .par{display:grid;grid-template-columns:1fr 1fr;gap:10px}.par small{display:block;color:var(--suave);font-weight:600;margin-bottom:4px;font-size:.78rem}
@@ -81,31 +80,72 @@ dialog::backdrop{background:rgba(0,0,0,.55)}.dlg{padding:20px}.dlg h2{font-size:
 .fechas{display:flex;gap:5px;margin-top:3px}.fechas span{flex:1;text-align:center;font-size:.6rem;color:var(--suave)}
 .recfila{border-top:1px solid var(--linea);padding:12px 0}.recfila:first-of-type{border-top:0}
 details>summary{list-style:none}details>summary::before{content:"▸ "}details[open]>summary::before{content:"▾ "}
+
+/* ===== Estilo gimnasio: negro, rojo y blanco ===== */
+body{background:radial-gradient(700px 380px at 90% -80px,rgba(229,22,29,.28),transparent 70%),linear-gradient(rgba(229,22,29,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(229,22,29,.07) 1px,transparent 1px) 0 0/44px 44px,var(--bg);background-attachment:fixed}
+h1,h2,h3,.res strong,nav small,.btn,.chip,.ins{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-weight:400}
+h1{font-size:1.6rem}h2{font-size:1.5rem}h3{font-size:1.25rem;line-height:1.1}
+header{background:rgba(9,9,10,.82);backdrop-filter:blur(12px);border-bottom:2px solid var(--verde);box-shadow:0 8px 30px rgba(229,22,29,.25)}
+header h1{display:flex;align-items:center;gap:10px;font-size:1.7rem}
+.logo{display:grid;place-items:center;width:32px;height:32px;background:var(--verde);clip-path:polygon(0 0,100% 0,100% 72%,72% 100%,0 100%)}
+.logo svg{width:18px;height:18px;fill:#fff}
+#sub{font-family:var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--verde-osc);opacity:1!important;font-size:1.1rem!important}
+.tarjeta,.lista,.res{position:relative;background:linear-gradient(180deg,#17171a,var(--card));border:1px solid var(--linea);border-radius:8px}
+.tarjeta::before{content:"";position:absolute;left:-1px;top:14px;width:3px;height:30px;background:var(--verde);box-shadow:0 0 12px var(--verde)}
+.btn{border-radius:6px;font-size:1.05rem;background:#1c1c20;transition:transform .12s,box-shadow .2s}.btn:active{transform:scale(.96)}
+.btn-pri{background:linear-gradient(135deg,#ff2a31,var(--verde));border-color:var(--verde);box-shadow:0 6px 22px rgba(229,22,29,.45)}
+.btn-pel{color:var(--rojo)}
+.chip{border-radius:6px;font-size:1.05rem;background:#1c1c20}.chip[aria-pressed="true"]{box-shadow:0 0 16px rgba(229,22,29,.5)}
+input,select{background:#0f0f11;border-radius:6px}input:focus-visible,select:focus-visible{outline:2px solid var(--verde);box-shadow:0 0 0 4px rgba(229,22,29,.2)}
+.serie,.step button,.rir button{background:#0f0f11;border-radius:6px}.rir button[aria-pressed="true"]{box-shadow:0 0 12px rgba(229,22,29,.5)}
+.ej-cab img{border-radius:6px;border:1px solid var(--verde);filter:contrast(1.08) saturate(.9)}
+.res strong{font-size:2.2rem;line-height:1}.res.mas strong{color:var(--verde-osc);text-shadow:0 0 18px rgba(229,22,29,.6)}
+.ins{border-radius:4px;font-size:.95rem;letter-spacing:.08em}.ins.mas{box-shadow:0 0 12px rgba(229,22,29,.55)}
+.alerta,.aviso-r{border-radius:6px;border-left-width:4px}
+.barras i{background:linear-gradient(180deg,#ff3b41,var(--verde));box-shadow:0 0 12px rgba(229,22,29,.45);border-radius:2px 2px 0 0}.barras i.menos{background:#d9d9dc;box-shadow:none}
+.fila{transition:background .15s}.fila:hover{background:#1c1c20}
+nav{background:rgba(9,9,10,.9);backdrop-filter:blur(14px);border-top:1px solid var(--verde);box-shadow:0 -10px 30px rgba(229,22,29,.18)}
+nav button{border-radius:6px;transition:color .2s,background .2s}nav{grid-template-columns:repeat(4,minmax(0,1fr))}nav button{min-width:0;padding:8px 2px}nav button small{font-size:.85rem;letter-spacing:.04em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button[aria-current="true"]{color:#fff;background:linear-gradient(180deg,rgba(229,22,29,.35),rgba(229,22,29,.05));box-shadow:inset 0 2px 0 var(--verde)}
+dialog{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3),0 24px 60px rgba(0,0,0,.6)}dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
+.acceso form{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3)}
+@keyframes entra{from{opacity:0;transform:translateY(8px)}}#vista>*{animation:entra .3s cubic-bezier(.2,.7,.2,1) both}
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="avisos" class="avisos" aria-live="polite"></div>
 <div id="acceso" class="acceso" hidden>
-  <form id="formAcceso"><h1>🏋️ Gimnasio</h1><p class="suave">Escribe tu clave para entrar.</p>
+  <form id="formAcceso"><h1>Gimnasio</h1><p class="suave">Escribe tu clave para entrar.</p>
   <label for="clave">Clave</label><input id="clave" type="password" autocomplete="current-password" required>
   <p id="errorAcceso" class="error" role="alert"></p><button class="btn btn-pri" style="width:100%;margin-top:10px">Entrar</button></form>
 </div>
-<header><div class="barra"><h1>🏋️ Gimnasio</h1><span id="sub" style="font-size:.85rem;opacity:.9"></span></div></header>
+<header><div class="barra"><h1><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>Gimnasio</h1><span id="sub" style="font-size:.85rem;opacity:.9"></span></div></header>
 <main id="vista"><p class="cargando">Cargando tu rutina…</p></main>
 <nav aria-label="Secciones">
-  <button data-v="entrenar" aria-current="true"><span>⚡</span><small>Entrenar</small></button>
-  <button data-v="progreso" aria-current="false"><span>📈</span><small>Progreso</small></button>
-  <button data-v="historial" aria-current="false"><span>🕘</span><small>Historial</small></button>
-  <button data-v="rutina" aria-current="false"><span>🗂️</span><small>Rutina</small></button>
+  <button data-v="entrenar" aria-current="true"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><small>Entrenar</small></button>
+  <button data-v="progreso" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg></span><small>Progreso</small></button>
+  <button data-v="historial" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><small>Historial</small></button>
+  <button data-v="rutina" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg></span><small>Rutina</small></button>
 </nav>
 <input type="file" id="archivo" accept="image/*" hidden>
 
+<dialog id="dlgMeta"><div class="dlg"><h2>Marca y previo</h2>
+  <label for="mtMarca">Marca a batir</label><input id="mtMarca" maxlength="300" placeholder="">
+  <p class="suave" style="font-size:.8rem;margin-top:4px">Peso×repeticiones de cada serie, separadas por «·». Ej: 50×9 · 50×9. Si lo dejas vacío, usa tu último entrenamiento.</p>
+  <label for="mtPrevio">Previo</label><input id="mtPrevio" maxlength="300" placeholder="Ej: Previo: 45×10">
+  <p id="mtError" class="error" role="alert"></p>
+  <div class="acc"><button class="btn" id="mtCancel">Cancelar</button><button class="btn btn-pri" id="mtOk">Guardar</button></div></div></dialog>
 <dialog id="dlgEj"><div class="dlg"><h2 id="ejTitulo">Ejercicio</h2>
   <label for="ejNombre">Nombre</label><input id="ejNombre" maxlength="120">
   <label for="ejMus">Grupo muscular</label><select id="ejMus"></select>
   <label for="ejDia">Día de rutina</label><select id="ejDia"></select>
   <label for="ejUni">Unidad</label><select id="ejUni"><option>kg</option><option>lbs</option></select>
   <label for="ejNota">Nota técnica (opcional)</label><input id="ejNota" maxlength="200" placeholder="con pausa, lastre…">
+  <label for="ejMarca">Marca a batir (opcional)</label><input id="ejMarca" maxlength="300" placeholder="Ej: 50×9 · 50×9">
+  <p class="suave" style="font-size:.8rem;margin-top:4px">Peso×repeticiones de cada serie, separadas por «·». Vacío = tu último entrenamiento.</p>
+  <label for="ejSeries">Número de series</label><input id="ejSeries" type="number" inputmode="numeric" min="1" max="12" placeholder="Automático (las de tu último entrenamiento)">
   <p id="ejError" class="error" role="alert"></p>
   <div class="acc"><button class="btn" id="ejCancel">Cancelar</button><button class="btn btn-pri" id="ejOk">Guardar</button></div></div></dialog>
 
@@ -148,7 +188,7 @@ const serTxt=s=>`${fmt(s.peso)}×${s.reps||"fallo"}${s.rir!=null?" @"+s.rir:""}`
 const idb=()=>new Promise((ok,no)=>{const r=indexedDB.open("gym",1);r.onupgradeneeded=()=>r.result.createObjectStore("k");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 const idbGet=async k=>{try{const d=await idb();return await new Promise(ok=>{const q=d.transaction("k").objectStore("k").get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ok(null)})}catch(e){return null}};
 const idbSet=async(k,v)=>{try{const d=await idb();return await new Promise(ok=>{const t=d.transaction("k","readwrite");t.objectStore("k").put(v,k);t.oncomplete=()=>ok();t.onerror=()=>ok()})}catch(e){}};
-const imgDef=m=>"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" fill="#1f8a5b"/><rect width="128" height="128" fill="#0b2a1c" opacity=".35"/><text x="64" y="80" font-size="56" text-anchor="middle">${EMO[m]||"⚡"}</text></svg>`);
+const imgDef=m=>"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" fill="#e5161d"/><rect width="128" height="128" fill="#0b2a1c" opacity=".35"/><text x="64" y="80" font-size="56" text-anchor="middle">${EMO[m]||"⚡"}</text></svg>`);
 const imgDe=e=>{const c=S.imgs[e.id];return c&&c.data&&c.v===e.img_v?c.data:imgDef(e.musculo)};
 async function sincImgs(){const v=S.ej.map(e=>e.id+":"+((S.imgs[e.id]||{}).v||"")).join(",");
   try{const l=await api("/imagenes?v="+encodeURIComponent(v));if(!l.length)return;
@@ -166,7 +206,8 @@ $("archivo").onchange=async ev=>{const f=ev.target.files[0];ev.target.value="";i
 const aUni=(s,e)=>+(e.unidad===s.unidad?s.peso:e.unidad==="lbs"?kg(s.peso,s.unidad)/LB:kg(s.peso,s.unidad)).toFixed(2);
 function borrador(){const k=S.dia;S.draft[k]=S.draft[k]||{};const prev=(S.ultimas[k]||{}).ejercicios||{};
   S.ej.filter(e=>e.dia===k).forEach(e=>{if(!S.draft[k][e.id]){const p=prev[e.id];
-    S.draft[k][e.id]={omitir:false,series:(p&&p.length?p:[{peso:0,reps:0,rir:null,unidad:e.unidad}]).map(s=>({peso:aUni(s,e),reps:s.reps,rir:s.rir,nota:""}))}}});
+    const base=(p&&p.length?p:parseMarca(e))||[{peso:0,reps:0,rir:null,unidad:e.unidad}],n=e.n_series>0?e.n_series:base.length;
+    S.draft[k][e.id]={omitir:false,series:Array.from({length:n},(_,i)=>{const s=base[Math.min(i,base.length-1)];return{peso:aUni(s,e),reps:s.reps,rir:i<base.length?s.rir:null,nota:""}})}}});
   return S.draft[k]}
 const guardarBorrador=()=>ls("gym_draft",S.draft);
 const guardarCache=()=>ls("gym_inicio",{ej:S.ej,ultimas:S.ultimas,alertas:S.alertas,pg:S.pg,ses:S.ses});
@@ -193,12 +234,16 @@ function vEntrenar(){const d=borrador(),lista=S.ej.filter(e=>e.dia===S.dia),u=S.
   <p class="suave" style="margin-bottom:6px">${u.fecha?"Comparando con tu último "+DIAS[S.dia]+": "+fechaTxt(u.fecha):"Aún no tienes un entrenamiento de este día."}</p>
   ${lista.map(e=>cardEj(e,d[e.id],(u.ejercicios||{})[e.id])).join("")||'<p class="cargando">No hay ejercicios en este día. Agrégalos en Rutina.</p>'}
   ${lista.length?'<div class="fin"><button class="btn btn-pri" data-act="terminar">Terminar entrenamiento y comparar</button></div>':""}`}
+const parseMarca=e=>{const r=[...String(e.marca||"").matchAll(/(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+)/gi)].map(m=>({peso:+m[1].replace(",","."),reps:+m[2],rir:null,unidad:e.unidad}));return r.length?r:null};
+let metaEd=null;
+function abrirMeta(e,auto){metaEd=e;$("mtMarca").value=e.marca||"";$("mtMarca").placeholder=auto||"";$("mtPrevio").value=e.referencia||"";$("mtError").textContent="";$("dlgMeta").showModal()}
 function cardEj(e,dr,prev){const paso=e.unidad==="kg"?2.5:5,o=dr.omitir,rc=recDe(e.id);
-  const marca=prev?prev.map(serTxt).join(" · "):"Sin registro";
+  const auto=prev?prev.map(serTxt).join(" · "):"Sin registro",marca=e.marca||auto;prev=parseMarca(e)||prev;
   return`<section class="tarjeta ${o?"omitida":""}" data-e="${e.id}">
   <div class="ej-cab"><img src="${esc(imgDe(e))}" alt="${esc(e.nombre)}" data-act="foto" title="Cambiar foto"><div class="grow"><h3>${esc(e.nombre)}</h3><p class="suave" style="font-size:.82rem">${esc(e.musculo)} · ${e.unidad}${e.principal?" · principal":""}</p></div>
   <button class="btn btn-peq" data-act="omitir">${o?"Incluir":"Omitir"}</button></div>
-  <p class="meta"><b>Marca a batir (${e.unidad}):</b> ${esc(marca)}${e.referencia?"<br>"+esc(e.referencia):""}${e.nota?"<br>Nota: "+esc(e.nota):""}</p>
+  <p class="meta" data-auto="${esc(auto)}"><b>Marca a batir (${e.unidad}):</b> ${esc(marca)}${e.marca?" <i>(manual)</i>":""}${e.referencia?"<br>"+esc(e.referencia):""}${e.nota?"<br>Nota: "+esc(e.nota):""}</p>
+  <button class="enlace" data-act="meta" style="font-size:.85rem">✎ Editar marca y previo</button>
   ${rc&&rc.recomendacion.tipo==="subir"?`<p class="rec">💡 ${esc(rc.recomendacion.titulo)} — ${esc(rc.recomendacion.texto)}</p>`:""}
   ${o?"":dr.series.map((s,i)=>{const c=cmpSerie({...s,unidad:e.unidad},prev&&prev[Math.min(i,prev.length-1)]);return`<div class="serie" data-i="${i}">
    <div class="serie-cab"><span>Serie ${i+1}</span><span>${prev?insMini(c):""} <button class="enlace" data-act="quitar" style="font-weight:600">Quitar</button></span></div>
@@ -240,7 +285,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
    <div class="chips" style="margin-bottom:0"><span class="ins ig">Marcas que bajaron: ${ind.peor_pct??0}%</span><span class="ins ig">Series al fallo: ${ind.rir0_pct??0}%</span><span class="ins ig">Días seguidos: ${ind.dias_seguidos??0}</span></div></div>
   <div class="dias">${[1,2,3].map(n=>`<button class="chip" data-act="pdia" data-n="${n}" aria-pressed="${d===n}">${DIAS[n]}</button>`).join("")}</div>
   <section class="tarjeta"><h2 class="t2">¿Voy mejorando en ${DIAS[d]}?</h2>${apilado(ses)}
-   <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: verde si lo mejoraste (más peso o más repeticiones), gris si quedó igual y naranja si bajó. Si con el tiempo ves más verde, estás progresando.</p>
+   <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: rojo si lo mejoraste (más peso o más repeticiones), gris oscuro si quedó igual y gris claro si bajó. Si con el tiempo ves más rojo, estás progresando.</p>
    ${reales.length?`<p style="margin-top:8px"><b>${M}</b> mejoras · <b>${I}</b> iguales · <b>${B}</b> bajadas en tus últimos ${reales.length} entrenamientos. ${tendencia}</p>`:`<p style="margin-top:8px">${tendencia}</p>`}</section>
   <section class="tarjeta"><h2 class="t2">Recomendaciones de carga</h2><p class="suave expl">Basadas en tus marcas: si llegas al tope de repeticiones (10 en los principales, 12 en los demás) o terminas con 2 o más repeticiones de reserva, es momento de subir ~5%.</p>
    ${recs.map(e=>{const r=e.recomendacion,t=TIPO[r.tipo]||TIPO.nuevo;return`<div class="recfila" data-e="${e.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(e.nombre)}</b><span class="ins ${t[0]}">${t[1]}</span></div>
@@ -249,7 +294,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
    ${sel?`<select data-sel="pej" aria-label="Ejercicio">${con.map(e=>`<option value="${e.id}" ${e.id===sel.id?"selected":""}>${esc(e.nombre)}</option>`).join("")}</select>
    <p style="margin:12px 0 0"><b>Fuerza estimada</b> (${sel.unidad})${sel.cambio_pct!=null?` · <span style="color:${sel.cambio_pct>=0?"var(--verde-osc)":"var(--naranja)"};font-weight:800">${sel.cambio_pct>0?"+":""}${sel.cambio_pct}% desde el inicio</span>`:""}</p>
    ${lineaSVG(sel.puntos.slice(-10).map(p=>({x:corto(p.fecha),y:p.e1rm,mal:p.veredicto==="-"})))}
-   <p class="suave expl">Es cuánto levantarías en una sola repetición, calculado con peso × (1 + reps ÷ 30). Sirve para comparar días aunque cambies peso y repeticiones. Si la línea sube, estás más fuerte; los puntos naranja son sesiones que bajaron.</p>
+   <p class="suave expl">Es cuánto levantarías en una sola repetición, calculado con peso × (1 + reps ÷ 30). Sirve para comparar días aunque cambies peso y repeticiones. Si la línea sube, estás más fuerte; los puntos claros son sesiones que bajaron.</p>
    <p style="margin:14px 0 0"><b>Volumen</b> (peso × repeticiones, ${sel.unidad})</p>${barrasVol(sel.puntos.slice(-10))}
    <p class="suave expl">Más volumen con buena técnica es más estímulo para crecer. Subir de a poco es mejor que dar saltos grandes.</p>
    <div class="lista" style="box-shadow:none;border:1px solid var(--linea)">${sel.puntos.slice().reverse().slice(0,6).map(p=>`<div class="fila" style="cursor:default"><span><b>${fechaTxt(p.fecha)}</b><br><small class="suave">${p.series.map(s=>esc(serTxt(s))).join(" · ")} ${sel.unidad}</small></span><span>${insignia(p.veredicto)}</span></div>`).join("")}</div>`:'<p class="suave">Aún no hay registros de este día.</p>'}</section>
@@ -258,10 +303,12 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
    <p class="expl"><b>Descanso:</b> tu ritmo normal es 3 días de entreno y 2 de descanso. Reviso tu último ciclo: si más de ~25% de tus marcas bajan, o casi todas tus series son al fallo, te pido un día extra. Si se acumula más (o 2 ciclos seguidos a la baja, o más de 4 semanas al fallo), te sugiero descarga.</p>
    <p class="expl"><b>Importante:</b> son guías según tus números, no consejo médico. Si sientes dolor (no solo cansancio), para y consulta a un profesional.</p></details>`}
 
+const marcasRec=e=>{const r=recDe(e.id),pts=r?r.puntos.slice(-2).reverse():[];
+  return`<span class="ult">${pts.length?pts.map(p=>`<small><b>${fechaTxt(p.fecha)}</b> · ${esc(p.series.map(serTxt).join(" · "))}</small>`).join(""):"<small>Sin entrenamientos registrados</small>"}</span>`};
 function vRutina(){
   return`<div style="display:flex;gap:10px;margin:14px 0"><button class="btn btn-pri" style="flex:1" data-act="nuevoej">+ Agregar ejercicio</button><button class="btn" data-act="exportar">Respaldo</button></div>
   ${[1,2,3].map(n=>`<h2 style="font-size:1rem;margin:18px 0 6px">${n}. ${DIAS[n]}</h2><div class="lista">${S.ej.filter(e=>e.dia===n).map(e=>`<div class="fila" style="grid-template-columns:auto 1fr;align-items:center;cursor:default" data-e="${e.id}">
-   <img src="${esc(imgDe(e))}" alt="" data-act="foto" style="width:52px;height:52px;border-radius:12px;object-fit:cover;cursor:pointer"><span><b>${esc(e.nombre)}</b><br><small class="suave">${esc(e.musculo)} · ${e.unidad}</small>
+   <img src="${esc(imgDe(e))}" alt="" data-act="foto" style="width:52px;height:52px;border-radius:12px;object-fit:cover;cursor:pointer"><span><b>${esc(e.nombre)}</b><br><small class="suave">${esc(e.musculo)} · ${e.unidad}</small>${marcasRec(e)}
    <span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-peq" data-act="foto">Foto</button><button class="btn btn-peq" data-act="verpg" data-id="${e.id}">Progreso</button><button class="btn btn-peq" data-act="editar">Editar</button><button class="btn btn-peq btn-pel" data-act="borrar">Quitar</button></span></span></div>`).join("")||'<p class="suave" style="padding:12px">Sin ejercicios.</p>'}</div>`).join("")}`}
 
 function render(){document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===S.vista));
@@ -270,13 +317,21 @@ function render(){document.querySelectorAll("nav button").forEach(b=>b.setAttrib
 
 /* ---------- ejercicio nuevo / editar ---------- */
 let editando=null;
+function ajustarSeries(e){const d=(S.draft[e.dia]||{})[e.id];if(!d||!e.n_series)return;     // si ya empezaste a entrenar, el borrador se ajusta al nuevo número
+  while(d.series.length>e.n_series)d.series.pop();
+  while(d.series.length<e.n_series){const l=d.series[d.series.length-1]||{peso:0,reps:0};d.series.push({peso:l.peso,reps:l.reps,rir:null,nota:""})}guardarBorrador()}
 function abrirEj(e){editando=e||null;$("ejTitulo").textContent=e?"Editar ejercicio":"Agregar ejercicio";$("ejNombre").value=e?e.nombre:"";$("ejMus").value=e?e.musculo:MUS[0];
-  $("ejDia").value=e?e.dia:S.dia;$("ejUni").value=e?e.unidad:"kg";$("ejNota").value=e?e.nota:"";$("ejError").textContent="";$("dlgEj").showModal()}
+  $("ejDia").value=e?e.dia:S.dia;$("ejUni").value=e?e.unidad:"kg";$("ejNota").value=e?e.nota:"";$("ejMarca").value=e?e.marca||"":"";$("ejSeries").value=e&&e.n_series?e.n_series:"";$("ejError").textContent="";$("dlgEj").showModal()}
 $("ejMus").innerHTML=MUS.map(m=>`<option>${m}</option>`).join("");$("ejDia").innerHTML=[1,2,3].map(n=>`<option value="${n}">${n}. ${DIAS[n]}</option>`).join("");
+$("mtCancel").onclick=()=>$("dlgMeta").close();
+$("mtOk").onclick=async()=>{const b={marca:$("mtMarca").value.trim(),referencia:$("mtPrevio").value.trim()};
+  try{const n=await api("/ejercicios/"+metaEd.id,{method:"PATCH",body:b});S.ej=S.ej.map(x=>x.id===n.id?n:x);$("dlgMeta").close();guardarCache();render();refrescar()}
+  catch(x){if(x.message!=="clave")$("mtError").textContent=x.red?"Necesitas internet para guardar este cambio.":x.message}};
 $("ejCancel").onclick=()=>$("dlgEj").close();
-$("ejOk").onclick=async()=>{const b={nombre:$("ejNombre").value.trim(),musculo:$("ejMus").value,dia:+$("ejDia").value,unidad:$("ejUni").value,nota:$("ejNota").value.trim()};
+$("ejOk").onclick=async()=>{const b={nombre:$("ejNombre").value.trim(),musculo:$("ejMus").value,dia:+$("ejDia").value,unidad:$("ejUni").value,nota:$("ejNota").value.trim(),marca:$("ejMarca").value.trim(),n_series:+$("ejSeries").value||0};
+  if(!Number.isInteger(b.n_series)||b.n_series<0||b.n_series>12){$("ejError").textContent="El número de series va de 1 a 12";return}
   if(b.nombre.length<2){$("ejError").textContent="Escribe el nombre del ejercicio";return}
-  try{if(editando){const e=await api("/ejercicios/"+editando.id,{method:"PATCH",body:b});S.ej=S.ej.map(x=>x.id===e.id?e:x)}else{S.ej.push(await api("/ejercicios",{method:"POST",body:b}))}
+  try{if(editando){const e=await api("/ejercicios/"+editando.id,{method:"PATCH",body:b});S.ej=S.ej.map(x=>x.id===e.id?e:x);ajustarSeries(e)}else{S.ej.push(await api("/ejercicios",{method:"POST",body:b}))}
     S.ej.sort((a,b)=>a.dia-b.dia||a.orden-b.orden||a.id-b.id);$("dlgEj").close();guardarCache();render();refrescar()}catch(x){if(x.message!=="clave")$("ejError").textContent=x.red?"Necesitas internet para cambiar la rutina.":x.message}};
 
 /* ---------- datos, guardado sin internet y sincronización ---------- */
@@ -317,6 +372,7 @@ document.addEventListener("click",async ev=>{
   else if(a==="verprog"){S.vista="progreso";S.pdia=0;scrollTo(0,0)}
   else if(a==="verpg"){const x=S.ej.find(q=>q.id===+t.dataset.id);S.vista="progreso";S.pdia=x?x.dia:S.dia;S.pej=+t.dataset.id;scrollTo(0,0)}
   else if(a==="pdia"){S.pdia=+t.dataset.n;S.pej=0}
+  else if(a==="meta"){const sec=t.closest("[data-e]");return abrirMeta(S.ej.find(q=>q.id===+sec.dataset.e),sec.querySelector(".meta").dataset.auto)}
   else if(a==="omitir"){dr.omitir=!dr.omitir;guardarBorrador()}
   else if(a==="w"){s.peso=Math.max(0,+(+s.peso+ +t.dataset.d).toFixed(2));guardarBorrador()}
   else if(a==="r"){s.reps=Math.max(0,(+s.reps||0)+ +t.dataset.d);guardarBorrador()}

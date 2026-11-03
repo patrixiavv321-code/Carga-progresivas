@@ -14,6 +14,8 @@ class EjercicioCrear(BaseModel):
     unidad: Unidad = "kg"
     nota: str = Field(default="", max_length=200)
     imagen: Optional[str] = Field(default=None, max_length=400_000)
+    marca: str = Field(default="", max_length=300)
+    n_series: int = Field(default=0, ge=0, le=12)
 
 
 class EjercicioEditar(BaseModel):
@@ -24,6 +26,9 @@ class EjercicioEditar(BaseModel):
     nota: Optional[str] = Field(default=None, max_length=200)
     imagen: Optional[str] = Field(default=None, max_length=400_000)   # "" = quitar la foto
     principal: Optional[bool] = None
+    referencia: Optional[str] = Field(default=None, max_length=300)   # "Previo"
+    marca: Optional[str] = Field(default=None, max_length=300)        # "Marca a batir"; "" = automática
+    n_series: Optional[int] = Field(default=None, ge=0, le=12)        # 0 = automático
 
 
 class EjercicioLeer(BaseModel):
@@ -37,6 +42,8 @@ class EjercicioLeer(BaseModel):
     principal: bool
     nota: str
     referencia: str
+    marca: str = ""
+    n_series: int = 0
     img_v: str = ""                    # la foto se pide aparte (ver /api/imagenes)
 
 
