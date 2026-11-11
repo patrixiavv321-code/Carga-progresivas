@@ -7,7 +7,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Path, Request, Response
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request, Response
+from fastapi import Path as ParamRuta   # sin pisar pathlib.Path (el Path de arriba)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -349,7 +350,7 @@ def historial_ejercicio(ejercicio_id: int, db: Session = Depends(get_db)):
 
 
 @api.delete("/rutinas/{dia}")
-def eliminar_rutina(dia: int = Path(ge=1, le=3), historial: bool = False, db: Session = Depends(get_db)):
+def eliminar_rutina(dia: int = ParamRuta(ge=1, le=3), historial: bool = False, db: Session = Depends(get_db)):
     """Elimina la rutina diaria completa: sus ejercicios salen de tu rutina. Con historial=true también se borran sus entrenamientos."""
     ejs = db.query(models.Ejercicio).filter(models.Ejercicio.dia == dia, models.Ejercicio.activo.is_(True)).all()
     for e in ejs:
