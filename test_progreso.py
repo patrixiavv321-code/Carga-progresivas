@@ -58,6 +58,54 @@ def test_recuperacion():
     assert r["nivel"] in ("atencion","alta") and r["hoy"]["estado"] == "descansar" and r["descanso_dias"] >= 3
     assert estado_recuperacion([bien[0]], date(2026,10,26), N)["hoy"]["estado"] == "ya"
 
+def test_unidades():
+    assert convertir(93.5, "kg", "kg") == 93.5                       # misma unidad: valor exacto, sin pasar por conversión
+    assert abs(convertir(convertir(200, "lbs", "kg"), "kg", "lbs") - 200) < 1e-9
+    assert abs(convertir(100, "kg", "lbs") - 220.46226218) < 1e-6
+    g = s(200, 10, u="lbs")                                          # el dato guardado no cambia al mostrarlo en kg
+    antes = (200, "lbs"); convertir(200, "lbs", "kg"); assert antes == (200, "lbs") and abs(g["peso_kg"] - 90.718474) < 1e-6
+
+def test_rpe_rir():
+    assert rir_de_rpe(10) == 0 and rir_de_rpe(9.5) == 0 and rir_de_rpe(9) == 1 and rir_de_rpe(8) == 2
+    assert rpe_de_rir(0) == 10.0 and rpe_de_rir(3) == 7.0
+
+def P(p, r, u="kg"): return {"peso": p, "unidad": u, "reps": r, "peso_kg": a_kg(p, u)}
+
+def test_pr():
+    h = [{"fecha": date(2026,10,1), "series": [P(200, 10, "lbs"), P(100, 0)]},        # reps 0 (fallo sin registrar): se ignora
+         {"fecha": date(2026,10,8), "series": [P(100, 3), P(90, 8)]},
+         {"fecha": date(2026,10,15), "series": [P(100, 3)]}]                           # empate: se conserva el más antiguo
+    pr = calcular_pr(h)
+    assert pr["max"]["kg"] == 100 and pr["max"]["fecha"] == "2026-10-08"
+    assert pr["e1rm"]["unidad"] == "lbs" and abs(pr["e1rm"]["kg"] - 120.958) < 0.01     # 200 lbs x10 > 100 kg x3 (110)
+    assert calcular_pr([{"fecha": date(2026,10,1), "series": [P(50, 20)]}])["max"]["reps"] == 20
+    assert calcular_pr([{"fecha": date(2026,10,1), "series": [P(50, 20)]}])["e1rm"] is None   # >12 reps: no sirve para 1RM
+    assert calcular_pr([]) is None
+
+def test_descarga():
+    f = date(2026, 11, 10)
+    assert semanas_continuas([f - timedelta(days=d) for d in (0, 3, 6, 9, 13, 17, 21, 25, 29, 34, 38, 42)], f) == 6
+    assert semanas_continuas([f - timedelta(days=d) for d in (0, 2, 30)], f) == 0       # hueco de 28 días: se reinicia
+    assert semanas_continuas([f - timedelta(days=d) for d in (0, 3, 6, 9, 13, 17, 21, 25, 29, 34)], f, f - timedelta(days=14)) == 2   # descarga marcada hace 14 días
+    assert semanas_continuas([f - timedelta(days=10)], f) == 0                           # parado >7 días
+    base = dict(n_sesiones=9, regresion=[], estancados=[], rir0_pct=0, semanas=3, dias_desde_descarga=None)
+    assert evaluar_descarga(**base)["nivel"] == "ok"
+    assert evaluar_descarga(**{**base, "estancados": ["A"]})["nivel"] == "ok"             # 1 ejercicio estancado no basta
+    assert evaluar_descarga(**{**base, "regresion": ["A"]})["nivel"] == "vigilar"
+    assert evaluar_descarga(**{**base, "regresion": ["A"], "rir0_pct": 70})["nivel"] == "recomendada"
+    assert evaluar_descarga(**{**base, "semanas": 9, "estancados": ["A", "B"]})["nivel"] == "recomendada"
+    assert evaluar_descarga(**{**base, "n_sesiones": 2, "regresion": ["A"]})["nivel"] == "sin_datos"
+    assert evaluar_descarga(**{**base, "dias_desde_descarga": 2, "regresion": ["A"]})["nivel"] == "en_curso"
+
+def test_marca_y_ciclo():
+    assert convertir_marca("200×10 · 200×9", "lbs", "kg") == "90.7×10 · 90.7×9"
+    assert convertir_marca("50x9", "kg", "kg") == "50x9" and convertir_marca("", "kg", "lbs") == ""
+    assert convertir_marca("Previo: 100×8 @RIR1", "kg", "lbs") == "Previo: 220.5×8 @RIR1"
+    r = estado_recuperacion([ses(0, 1, 2, 1, 0)], date(2026, 11, 3), N, 0, [1, 3])           # rutina 2 eliminada: tras Torso toca Pierna
+    assert "Pierna" in r["hoy"]["mensaje"] and "Brazo" not in r["hoy"]["mensaje"]
+    r = estado_recuperacion([ses(0, 3, 2, 1, 0)], date(2026, 11, 3), N, 0, [1, 3])           # tras Pierna (última) vuelve a Torso
+    assert "Torso" in r["hoy"]["mensaje"]
+
 if __name__ == "__main__":
     for n, f in list(globals().items()):
         if n.startswith("test_"):

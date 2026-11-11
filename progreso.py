@@ -144,7 +144,7 @@ def fmt_n(n: float) -> str:
 
 
 # ---------- Recuperación: ¿entreno hoy o descanso más? ----------
-def estado_recuperacion(ses: List[dict], hoy: date, nombres: Dict[int, str], alertas: int = 0) -> dict:
+def estado_recuperacion(ses: List[dict], hoy: date, nombres: Dict[int, str], alertas: int = 0, activos: Optional[List[int]] = None) -> dict:
     """ses: sesiones de la más antigua a la más reciente: {'fecha','dia','resumen','rir0','rirdef'}.
     Tu ritmo normal: 3 días seguidos de entreno y 2 de descanso."""
     if not ses:
@@ -179,8 +179,9 @@ def estado_recuperacion(ses: List[dict], hoy: date, nombres: Dict[int, str], ale
         texto = "Tus cargas se mantienen o suben. Con 2 días de descanso después de tus 3 días de entreno vas bien."
     ult = ses[-1]
     gap = (hoy - ult["fecha"]).days
-    sig = ult["dia"] % 3 + 1
-    completo = ult["dia"] == 3 or seguidos >= 3
+    activos = sorted(activos or [1, 2, 3])                       # solo cuentan las rutinas que no eliminaste
+    sig = next((d for d in activos if d > ult["dia"]), activos[0])
+    completo = sig <= ult["dia"] or seguidos >= len(activos) or len(activos) == 1
     hechos = max(gap - 1, 0)
     if gap <= 0:
         if completo:
@@ -200,3 +201,104 @@ def estado_recuperacion(ses: List[dict], hoy: date, nombres: Dict[int, str], ale
         h["mensaje"] += " Llevas más de una semana parado: retoma con ~10% menos de peso."
     return {"nivel": nivel, "titulo": titulo, "texto": texto, "descanso_dias": desc, "hoy": h,
             "indicadores": {"peor_pct": round(peor), "rir0_pct": round(rir0), "dias_seguidos": seguidos}}
+
+
+# ---------- Unidades: solo se convierte para MOSTRAR; lo guardado nunca se reescribe ----------
+def convertir(peso: float, de: str, a: str) -> float:
+    """Convierte sin pasos intermedios redondeados. Si la unidad es la misma devuelve el valor original, exacto."""
+    if de == a:
+        return peso
+    return a_unidad(a_kg(peso, de), a)
+
+
+# ---------- RIR ↔ RPE (RPE ≈ 10 − RIR) ----------
+def rir_de_rpe(rpe: float) -> int:
+    """Se redondea hacia abajo (hacia 'más esfuerzo'): RPE 9.5 → RIR 0. Es la lectura prudente para fatiga y subidas de carga."""
+    return max(0, min(10, int(10 - rpe)))
+
+
+def rpe_de_rir(rir: int) -> float:
+    return float(10 - rir)
+
+
+# ---------- Récord personal: peso máximo y mejor 1RM estimado de toda la historia ----------
+def calcular_pr(hist: List[dict], max_reps_1rm: int = 12) -> Optional[dict]:
+    """hist: sesiones del ejercicio, cada una {'fecha': date, 'series': [{'peso','unidad','reps','peso_kg'}]}.
+    El 1RM estimado solo usa series de hasta 12 repeticiones (más allá la fórmula se vuelve poco fiable).
+    Ante un empate gana el récord más antiguo (el que hay que superar)."""
+    mejor_peso = mejor_1rm = None
+    for h in hist:
+        for s in h["series"]:
+            if s["reps"] <= 0 or s["peso_kg"] <= 0:
+                continue
+            k = round(s["peso_kg"], 4)
+            if mejor_peso is None or (k, s["reps"]) > (mejor_peso["_k"], mejor_peso["reps"]):
+                mejor_peso = {"_k": k, "kg": s["peso_kg"], "reps": s["reps"], "peso": s["peso"], "unidad": s["unidad"], "fecha": h["fecha"].isoformat()}
+            if s["reps"] <= max_reps_1rm:
+                e = round(e1rm(s["peso_kg"], s["reps"]), 4)
+                if mejor_1rm is None or e > mejor_1rm["_k"]:
+                    mejor_1rm = {"_k": e, "kg": e1rm(s["peso_kg"], s["reps"]), "de_kg": s["peso_kg"], "reps": s["reps"], "peso": s["peso"], "unidad": s["unidad"], "fecha": h["fecha"].isoformat()}
+    if mejor_peso is None:
+        return None
+    for d in (mejor_peso, mejor_1rm):
+        if d:
+            d.pop("_k")
+    return {"max": mejor_peso, "e1rm": mejor_1rm}
+
+
+# ---------- Descarga (deload): detector basado en señales ----------
+def semanas_continuas(fechas: List[date], hoy: date, ultima_descarga: Optional[date] = None, hueco: int = 7) -> int:
+    """Semanas entrenando sin pausa: se reinicia con un hueco de ≥7 días entre sesiones o al marcar una descarga."""
+    fechas = sorted(set(fechas))
+    if not fechas or (hoy - fechas[-1]).days >= hueco:
+        return 0
+    inicio = fechas[0]
+    for a, b in zip(fechas, fechas[1:]):
+        if (b - a).days >= hueco:
+            inicio = b
+    if ultima_descarga and ultima_descarga > inicio:
+        inicio = ultima_descarga
+    return max(0, (hoy - inicio).days // 7)
+
+
+def evaluar_descarga(*, n_sesiones: int, regresion: List[str], estancados: List[str], rir0_pct: float,
+                     semanas: int, dias_desde_descarga: Optional[int]) -> dict:
+    """Suma puntos por señales independientes. Ninguna señal sola obliga a descargar:
+    el rendimiento a la baja y el esfuerzo constante al límite pesan más que el calendario o un solo ejercicio estancado."""
+    if dias_desde_descarga is not None and dias_desde_descarga < 7:
+        return {"nivel": "en_curso", "puntos": 0, "senales": [], "semanas": semanas, "dias": dias_desde_descarga + 1}
+    if n_sesiones < 4:
+        return {"nivel": "sin_datos", "puntos": 0, "senales": [], "semanas": semanas, "dias": None}
+    senales, pts = [], 0
+    if regresion:
+        p = 3 if len(regresion) >= 2 else 2
+        pts += p
+        senales.append({"tipo": "rendimiento", "peso": p, "texto": f"Rendimiento a la baja 2 sesiones seguidas en: {', '.join(regresion[:3])}."})
+    if estancados:
+        p = 2 if len(estancados) >= 2 else 1
+        pts += p
+        senales.append({"tipo": "estancamiento", "peso": p, "texto": f"Sin mejora de fuerza estimada en 3 sesiones: {', '.join(estancados[:3])}."
+                        + ("" if len(estancados) >= 2 else " Con un solo ejercicio, revisa primero técnica, sueño y progresión antes de descargar.")})
+    if rir0_pct >= 40:
+        p = 2 if rir0_pct >= 60 else 1
+        pts += p
+        senales.append({"tipo": "esfuerzo", "peso": p, "texto": f"{round(rir0_pct)}% de tus series del último ciclo terminaron al fallo (RIR 0)."})
+    if semanas >= 5:
+        p = 2 if semanas >= 8 else 1
+        pts += p
+        senales.append({"tipo": "tiempo", "peso": p, "texto": f"Llevas {semanas} semanas seguidas sin bajar la carga" + (" (más allá de la ventana habitual de 4 a 8)." if semanas >= 8 else " (dentro de la ventana habitual de 4 a 8).")})
+    nivel = "recomendada" if pts >= 4 else "vigilar" if pts >= 2 else "ok"
+    return {"nivel": nivel, "puntos": pts, "senales": senales, "semanas": semanas, "dias": None}
+
+
+# ---------- "Marca a batir" escrita a mano: al cambiar de unidad se convierten sus pesos ----------
+def convertir_marca(texto: str, de: str, a: str) -> str:
+    """'50×9 · 50×8' → pesos convertidos a 1 decimal. Solo toca el número antes de la 'x'; las repeticiones no cambian."""
+    import re
+    if not texto or de == a:
+        return texto
+
+    def cambia(m):
+        v = round(convertir(float(m.group(1).replace(",", ".")), de, a), 1)
+        return f"{fmt_n(v)}{m.group(2)}"
+    return re.sub(r"(\d+(?:[.,]\d+)?)(\s*[x×*]\s*\d+)", cambia, texto, flags=re.I)

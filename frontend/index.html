@@ -16,7 +16,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:
 header{position:sticky;top:0;z-index:5;background:var(--verde);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 .barra{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
 header h1{font-size:1.2rem;font-weight:800}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
 nav button{background:none;border:0;font:inherit;color:var(--suave);padding:8px 4px;border-radius:12px;cursor:pointer;display:grid;gap:2px;justify-items:center;min-height:52px}
 nav button span{font-size:1.3rem;line-height:1}nav button small{font-weight:700;font-size:.78rem}
 nav button[aria-current="true"]{color:var(--verde-osc);background:var(--verde-claro)}
@@ -105,13 +105,28 @@ input,select{background:#0f0f11;border-radius:6px}input:focus-visible,select:foc
 .barras i{background:linear-gradient(180deg,#ff3b41,var(--verde));box-shadow:0 0 12px rgba(229,22,29,.45);border-radius:2px 2px 0 0}.barras i.menos{background:#d9d9dc;box-shadow:none}
 .fila{transition:background .15s}.fila:hover{background:#1c1c20}
 nav{background:rgba(9,9,10,.9);backdrop-filter:blur(14px);border-top:1px solid var(--verde);box-shadow:0 -10px 30px rgba(229,22,29,.18)}
-nav button{border-radius:6px;transition:color .2s,background .2s}nav{grid-template-columns:repeat(4,minmax(0,1fr))}nav button{min-width:0;padding:8px 2px}nav button small{font-size:.85rem;letter-spacing:.04em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav button{border-radius:6px;transition:color .2s,background .2s}nav{grid-template-columns:repeat(5,minmax(0,1fr))}nav button{min-width:0;padding:8px 2px}nav button small{font-size:.85rem;letter-spacing:.04em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav button[aria-current="true"]{color:#fff;background:linear-gradient(180deg,rgba(229,22,29,.35),rgba(229,22,29,.05));box-shadow:inset 0 2px 0 var(--verde)}
 dialog{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3),0 24px 60px rgba(0,0,0,.6)}dialog::backdrop{background:rgba(0,0,0,.75);backdrop-filter:blur(4px)}
 .acceso form{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(229,22,29,.3)}
 @keyframes entra{from{opacity:0;transform:translateY(8px)}}#vista>*{animation:entra .3s cubic-bezier(.2,.7,.2,1) both}
 @media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}}
+
+/* ===== Buscador, récord, guías ===== */
+.buscar{position:sticky;top:var(--hh,60px);z-index:4;display:flex;gap:8px;align-items:center;margin:0 -14px 8px;padding:8px 14px;background:rgba(9,9,10,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--linea)}
+.bx{position:relative;flex:1;min-width:0}.bx input{padding-left:38px;padding-right:38px}
+.bx>span{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.7}
+.bx-x{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--suave);font-size:1.1rem;min-width:40px;min-height:40px;cursor:pointer}
+.buscar .uni{min-width:64px;flex:none}
+.pr{margin-top:8px;font-size:.84rem;border-left:2px solid #ffc83d;padding:5px 8px;background:#15130a;border-radius:0 6px 6px 0}.pr i{color:var(--suave);font-style:normal}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:600;font-size:.92rem;margin-top:14px}.chk input{width:20px;height:20px;min-height:0;margin-top:2px;flex:none;accent-color:var(--verde)}
+.gp summary{font-weight:700;cursor:pointer}.gp p{font-size:.9rem;margin:8px 0}.gp ul{margin:6px 0;padding-left:20px;font-size:.9rem}.gp li{margin:4px 0}.gp small,.fuentes{color:var(--suave);font-size:.78rem;line-height:1.4}
+.senal{display:flex;gap:8px;font-size:.9rem;padding:6px 0;border-top:1px solid var(--linea)}
+.tabla{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:.88rem;padding:8px 0;border-top:1px solid var(--linea)}.tabla small{grid-column:1/-1;color:var(--suave)}
+.reloj{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.9rem}.reloj b{font-variant-numeric:tabular-nums;color:var(--verde-osc)}
+.tri{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.tri>div{min-width:0}.tri input{min-width:0}.tri label{margin:8px 0 4px}
+nav button small{font-size:.72rem;letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -128,6 +143,7 @@ dialog{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(
   <button data-v="progreso" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg></span><small>Progreso</small></button>
   <button data-v="historial" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><small>Historial</small></button>
   <button data-v="rutina" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg></span><small>Rutina</small></button>
+  <button data-v="guias" aria-current="false"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6M9 12h6"/></svg></span><small>Guías</small></button>
 </nav>
 <input type="file" id="archivo" accept="image/*" hidden>
 
@@ -149,6 +165,13 @@ dialog{border:1px solid var(--verde);border-radius:8px;box-shadow:0 0 40px rgba(
   <p id="ejError" class="error" role="alert"></p>
   <div class="acc"><button class="btn" id="ejCancel">Cancelar</button><button class="btn btn-pri" id="ejOk">Guardar</button></div></div></dialog>
 
+<dialog id="dlgRutina"><div class="dlg"><h2>Eliminar rutina</h2>
+  <p id="rtNombre" class="suave" style="margin:6px 0 12px"></p>
+  <p style="font-weight:700">¿Estás seguro de eliminar esta rutina? Esta acción no se puede deshacer.</p>
+  <label class="chk" for="rtHist"><input type="checkbox" id="rtHist"><span>También borrar el historial de entrenamientos de esta rutina. Sin marcarla, tus registros se conservan.</span></label>
+  <p id="rtError" class="error" role="alert"></p>
+  <div class="acc"><button class="btn" id="rtCancel" autofocus>Cancelar</button><button class="btn btn-pri" id="rtOk">Eliminar</button></div></div></dialog>
+
 <script>
 const $=id=>document.getElementById(id);
 const MUS=["Pecho","Espalda","Hombro","Bíceps","Tríceps","Cuádriceps","Isquiotibiales","Glúteo","Aductores","Gemelos","Otro"];
@@ -162,7 +185,7 @@ const hoyCol=()=>new Date(Date.now()-5*36e5).toISOString().slice(0,10);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const ls=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k));v===null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}};
 const cola=()=>ls("gym_cola")||[];
-const S={clave:localStorage.getItem("clave")||"",vista:"entrenar",dia:+(ls("gym_dia")||1),ej:[],ultimas:{},alertas:[],pg:null,ses:null,draft:ls("gym_draft")||{},res:null,filtro:0,pdia:0,pej:0,imgs:{},sinRed:false};
+const S={clave:localStorage.getItem("clave")||"",vista:"entrenar",dia:+(ls("gym_dia")||1),ej:[],ultimas:{},alertas:[],pg:null,ses:null,draft:ls("gym_draft")||{},res:null,filtro:0,pdia:0,pej:0,imgs:{},sinRed:false,prs:{},desc:null,aj:{},q:"",escala:ls("gym_escala")||"RIR",guia:"descarga",gmodo:"volumen",gdia:0,sn:ls("gym_sueno")||{cur:"02:00",obj:"00:00",wake:"09:00"}};
 
 function aviso(t,tipo){const e=document.createElement("div");e.className="aviso "+(tipo||"");e.textContent=t;$("avisos").append(e);setTimeout(()=>e.remove(),3400)}
 async function api(ruta,op){op=op||{};let r;
@@ -182,6 +205,60 @@ function cmpEj(act,prev){if(!prev||!prev.length)return{v:"nuevo",m:act.map(()=>"
   const vol=a=>a.reduce((t,s)=>t+kg(s.peso,s.unidad)*s.reps,0),vp=vol(prev);return{v,m,pct:vp>0?+((vol(act)-vp)/vp*100).toFixed(1):null}}
 const insignia=v=>v==="+"?'<span class="ins mas">+ Mejora</span>':v==="-"?'<span class="ins menos">− Menor</span>':v==="nuevo"?'<span class="ins nuevo">Nuevo</span>':'<span class="ins ig">= Igual</span>';
 const insMini=v=>v==="+"?'<span class="ins mas">+</span>':v==="-"?'<span class="ins menos">−</span>':'<span class="ins ig">=</span>';
+/* ---------- unidades: solo se convierte para MOSTRAR; lo guardado conserva peso y unidad originales ---------- */
+const convU=(p,de,a)=>de===a?p:(de==="lbs"?p*LB:p/LB);
+const pU=(p,de,a)=>de===a?p:+convU(p,de,a).toFixed(1);
+const serTxtU=(s,u)=>`${fmt(pU(s.peso,s.unidad||u,u))}×${s.reps||"fallo"}${s.rir!=null?" @"+s.rir:""}`;
+const diasAct=()=>{const d=[1,2,3].filter(n=>S.ej.some(e=>e.dia===n));return d.length?d:[1,2,3]};   // las rutinas eliminadas no aparecen en las pestañas
+const convMarca=(t,de,a)=>!t||de===a?t:String(t).replace(/(\d+(?:[.,]\d+)?)(\s*[x×*]\s*\d+)/gi,(_,w,r)=>fmt(+convU(+w.replace(",","."),de,a).toFixed(1))+r);
+const unidadGlobal=()=>{const u=[...new Set(S.ej.map(e=>e.unidad))];return u.length===1?u[0]:"mix"};
+const cfg=()=>ls("gym_cfg")||[];
+function convDraft(e,nueva){Object.values(S.draft).forEach(dd=>{const d=dd&&dd[e.id];if(!d)return;
+  d.series.forEach(s=>{const o=s.orig||{p:s.peso,u:e.unidad};s.orig=o;s.peso=o.u===nueva?o.p:+convU(o.p,o.u,nueva).toFixed(2)})})}   // vuelve al valor escrito sin acumular redondeos
+async function ejecutarCfg(op){if(op.t==="g")await api("/unidad",{method:"PUT",body:{unidad:op.u}});else await api("/ejercicios/"+op.id,{method:"PATCH",body:{unidad:op.u}})}
+async function setUnidad(lista,nueva,global){lista.forEach(e=>{if(e.unidad!==nueva){convDraft(e,nueva);e.marca=convMarca(e.marca,e.unidad,nueva);e.unidad=nueva}});guardarBorrador();guardarCache();
+  const op=global?{t:"g",u:nueva}:{t:"e",id:lista[0].id,u:nueva};
+  try{await ejecutarCfg(op)}catch(x){if(x.red){ls("gym_cfg",[...cfg(),op]);aviso("Sin internet: la unidad se sincroniza al reconectar")}else falla(x)}
+  render()}
+
+/* ---------- récord personal ---------- */
+const real=(e,s)=>s.orig&&s.orig.u?{peso:s.orig.p,unidad:s.orig.u}:{peso:+s.peso||0,unidad:e.unidad};   // el valor que de verdad escribiste, en su unidad (el de pantalla puede estar convertido y redondeado)
+function superaPR(e,s){const p=S.prs[e.id],r=real(e,s);if(!p||!p.max||!(s.reps>0)||!(r.peso>0))return false;const k=kg(r.peso,r.unidad);
+  return k>p.max.kg+1e-6||(Math.abs(k-p.max.kg)<=1e-6&&s.reps>p.max.reps)||(s.reps<=12&&p.e1rm&&e1(k,s.reps)>p.e1rm.kg+1e-6)}
+function actualizarPR(e,ss){const p=S.prs[e.id]=S.prs[e.id]||{max:null,e1rm:null},f=hoyCol();
+  ss.forEach(s=>{const r=real(e,s);if(!(s.reps>0&&r.peso>0))return;const k=kg(r.peso,r.unidad);
+    if(!p.max||k>p.max.kg+1e-6||(Math.abs(k-p.max.kg)<=1e-6&&s.reps>p.max.reps))p.max={kg:k,reps:s.reps,peso:r.peso,unidad:r.unidad,fecha:f};
+    if(s.reps<=12){const x=e1(k,s.reps);if(!p.e1rm||x>p.e1rm.kg+1e-6)p.e1rm={kg:x,de_kg:k,reps:s.reps,peso:r.peso,unidad:r.unidad,fecha:f}}})}
+const esPR=(e,s)=>superaPR(e,s);
+function prHtml(e){const p=S.prs[e.id];if(!p||!p.max)return"";const m=p.max,r=p.e1rm,u=e.unidad;
+  return`<p class="pr">🏆 <b>Récord histórico:</b> ${fmt(pU(m.peso,m.unidad,u))} ${u} × ${m.reps} <i>(${corto(m.fecha)})</i>${r?`<br>1RM estimado: <b>${fmt(pU(r.kg,"kg",u))} ${u}</b> <i>(${fmt(pU(r.peso,r.unidad,u))}×${r.reps}, ${corto(r.fecha)})</i>`:""}</p>`}
+
+/*FUZZY*/
+const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
+function dist(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p2=null,p1=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++){const k=a[i-1]===b[j-1]?0:1;let v=Math.min(p1[j]+1,c[j-1]+1,p1[j-1]+k);if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])v=Math.min(v,p2[j-2]+1);c[j]=v}p2=p1;p1=c}return p1[n]}
+const ALIAS={bench:["press","pecho"],banca:["press","pecho"],squat:["sentadilla"],sentadillas:["sentadilla"],deadlift:["peso","muerto"],lat:["jalon"],pulldown:["jalon"],pull:["jalon","dominadas"],row:["remo"],calf:["gemelos"],pantorrillas:["gemelos"],glute:["gluteo","hip"],glutes:["gluteo"],curl:["biceps"],biceps:["curl"],triceps:["polea","copa"],quad:["cuadriceps"],quads:["cuadriceps"],hamstring:["isquiotibiales"],femoral:["isquiotibiales"],shoulder:["hombro","militar"],fly:["pec","aperturas"],abs:["abdomen"]};
+function scoreTok(q,t){if(t===q)return 1;if(t.startsWith(q))return .92;if(q.length>=3&&t.includes(q))return .8;
+  const max=q.length<=3?0:q.length<=6?1:2;if(!max)return 0;
+  const d=Math.min(dist(q,t),dist(q,t.slice(0,q.length)));return d<=max?.7-.12*d:0}
+function puntaje(e,qt){const nom=norm(e.nombre),tn=nom.split(" ").filter(Boolean),tx=norm(e.musculo+" "+(e.nota||"")).split(" ").filter(Boolean);let tot=0;
+  for(const q of qt){let mejor=0;for(const c of [q,...(ALIAS[q]||[])]){const pen=c===q?1:.85;
+    for(const t of tn)mejor=Math.max(mejor,scoreTok(c,t)*pen);for(const t of tx)mejor=Math.max(mejor,scoreTok(c,t)*.6*pen)}
+    if(mejor<=0)return 0;tot+=mejor}
+  return tot/qt.length+(nom.includes(qt.join(" "))?.2:0)}
+function buscar(lista,q){const qt=norm(q).split(" ").filter(Boolean);if(!qt.length)return lista.map(e=>({e,s:1}));
+  return lista.map(e=>({e,s:puntaje(e,qt)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||(a.e.orden||0)-(b.e.orden||0))}
+/*FIN-FUZZY*/
+
+function listaEj(){const d=borrador(),u=S.ultimas[S.dia]||{},base=S.ej.filter(e=>e.dia===S.dia),card=e=>cardEj(e,d[e.id],(u.ejercicios||{})[e.id]);
+  if(!norm(S.q))return base.map(card).join("")||'<p class="cargando">No hay ejercicios en este día. Agrégalos en Rutina.</p>';
+  const r=buscar(base,S.q),otros=diasAct().filter(n=>n!==S.dia).map(n=>({n,c:buscar(S.ej.filter(e=>e.dia===n),S.q).length})).filter(x=>x.c);
+  return(r.length?r.map(x=>card(x.e)).join(""):`<p class="cargando">Sin resultados en ${DIAS[S.dia]} para «${esc(S.q)}».</p>`)
+   +(otros.length?`<p class="suave" style="margin:10px 0">También hay coincidencias en: ${otros.map(x=>`<button class="enlace" data-act="dia" data-n="${x.n}">${DIAS[x.n]} (${x.c})</button>`).join(" · ")}</p>`:"")}
+function barraBuscar(){const ug=unidadGlobal();
+  return`<div class="buscar"><div class="bx"><span aria-hidden="true">🔍</span><input id="q" type="search" placeholder="Buscar ejercicio…" value="${esc(S.q)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Buscar ejercicio"><button class="bx-x" data-act="limpiarq" aria-label="Borrar búsqueda" ${S.q?"":"hidden"}>✕</button></div>
+  <button class="btn btn-peq uni" data-act="unig" title="Unidad de todos los ejercicios">${ug==="mix"?"kg·lbs":ug}</button></div>`}
+
 const serTxt=s=>`${fmt(s.peso)}×${s.reps||"fallo"}${s.rir!=null?" @"+s.rir:""}`;
 
 /* ---------- imágenes: se guardan en el teléfono y solo se descargan si cambian ---------- */
@@ -207,10 +284,10 @@ const aUni=(s,e)=>+(e.unidad===s.unidad?s.peso:e.unidad==="lbs"?kg(s.peso,s.unid
 function borrador(){const k=S.dia;S.draft[k]=S.draft[k]||{};const prev=(S.ultimas[k]||{}).ejercicios||{};
   S.ej.filter(e=>e.dia===k).forEach(e=>{if(!S.draft[k][e.id]){const p=prev[e.id];
     const base=(p&&p.length?p:parseMarca(e))||[{peso:0,reps:0,rir:null,unidad:e.unidad}],n=e.n_series>0?e.n_series:base.length;
-    S.draft[k][e.id]={omitir:false,series:Array.from({length:n},(_,i)=>{const s=base[Math.min(i,base.length-1)];return{peso:aUni(s,e),reps:s.reps,rir:i<base.length?s.rir:null,nota:""}})}}});
+    S.draft[k][e.id]={omitir:false,series:Array.from({length:n},(_,i)=>{const s=base[Math.min(i,base.length-1)];return{peso:aUni(s,e),reps:s.reps,rir:i<base.length?s.rir:null,rpe:i<base.length?(s.rpe??(s.rir!=null?10-s.rir:null)):null,nota:""}})}}});
   return S.draft[k]}
 const guardarBorrador=()=>ls("gym_draft",S.draft);
-const guardarCache=()=>ls("gym_inicio",{ej:S.ej,ultimas:S.ultimas,alertas:S.alertas,pg:S.pg,ses:S.ses});
+const guardarCache=()=>ls("gym_inicio",{ej:S.ej,ultimas:S.ultimas,alertas:S.alertas,pg:S.pg,ses:S.ses,prs:S.prs,desc:S.desc,aj:S.aj});
 const recDe=id=>S.pg&&S.pg.ejercicios.find(x=>x.id===id);
 
 /* ---------- gráficas ---------- */
@@ -227,29 +304,31 @@ function barrasVol(p){const mx=Math.max(...p.map(x=>x.volumen),1);
 
 /* ---------- vistas ---------- */
 function bannerHoy(){const R=S.pg&&S.pg.recuperacion;if(!R)return"";
-  return`<div class="aviso-r ${R.nivel}"><b>${esc(R.hoy.mensaje)}</b>${R.nivel!=="bien"?`<br><span style="font-size:.9rem">${esc(R.texto)}</span>`:""}<br><button class="enlace" data-act="verprog" style="font-size:.88rem">Ver mi recuperación y progreso</button></div>`}
+  return`<div class="aviso-r ${R.nivel}"><b>${esc(R.hoy.mensaje)}</b>${R.nivel!=="bien"?`<br><span style="font-size:.9rem">${esc(R.texto)}</span>`:""}<br><button class="enlace" data-act="verprog" style="font-size:.88rem">Ver mi recuperación y progreso</button>${R.nivel!=="bien"?' · <button class="enlace" data-act="verguia" style="font-size:.88rem">Guía de descarga</button>':""}</div>`}
 function estadoRed(){const n=cola().length;return(S.sinRed||n)?`<div class="aviso-r atencion" style="font-size:.9rem">${S.sinRed?"Sin internet: puedes entrenar normal, todo se guarda en tu teléfono.":""}${n?` ${n} entrenamiento(s) por subir: se envían solos cuando haya conexión.`:""}</div>`:""}
-function vEntrenar(){const d=borrador(),lista=S.ej.filter(e=>e.dia===S.dia),u=S.ultimas[S.dia]||{};
-  return`${estadoRed()}<div class="dias" role="group">${[1,2,3].map(n=>`<button class="chip" data-act="dia" data-n="${n}" aria-pressed="${S.dia===n}">${n}. ${DIAS[n]}</button>`).join("")}</div>${bannerHoy()}
+function vEntrenar(){if(!diasAct().includes(S.dia)){S.dia=diasAct()[0];ls("gym_dia",S.dia)}const d=borrador(),lista=S.ej.filter(e=>e.dia===S.dia),u=S.ultimas[S.dia]||{};
+  return`${estadoRed()}<div class="dias" role="group">${diasAct().map(n=>`<button class="chip" data-act="dia" data-n="${n}" aria-pressed="${S.dia===n}">${n}. ${DIAS[n]}</button>`).join("")}</div>${bannerHoy()}
+  ${barraBuscar()}
   <p class="suave" style="margin-bottom:6px">${u.fecha?"Comparando con tu último "+DIAS[S.dia]+": "+fechaTxt(u.fecha):"Aún no tienes un entrenamiento de este día."}</p>
-  ${lista.map(e=>cardEj(e,d[e.id],(u.ejercicios||{})[e.id])).join("")||'<p class="cargando">No hay ejercicios en este día. Agrégalos en Rutina.</p>'}
+  <div id="listaEj">${listaEj()}</div>
   ${lista.length?'<div class="fin"><button class="btn btn-pri" data-act="terminar">Terminar entrenamiento y comparar</button></div>':""}`}
 const parseMarca=e=>{const r=[...String(e.marca||"").matchAll(/(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+)/gi)].map(m=>({peso:+m[1].replace(",","."),reps:+m[2],rir:null,unidad:e.unidad}));return r.length?r:null};
 let metaEd=null;
 function abrirMeta(e,auto){metaEd=e;$("mtMarca").value=e.marca||"";$("mtMarca").placeholder=auto||"";$("mtPrevio").value=e.referencia||"";$("mtError").textContent="";$("dlgMeta").showModal()}
 function cardEj(e,dr,prev){const paso=e.unidad==="kg"?2.5:5,o=dr.omitir,rc=recDe(e.id);
-  const auto=prev?prev.map(serTxt).join(" · "):"Sin registro",marca=e.marca||auto;prev=parseMarca(e)||prev;
+  const auto=prev?prev.map(x=>serTxtU(x,e.unidad)).join(" · "):"Sin registro",marca=e.marca||auto;prev=parseMarca(e)||prev;
   return`<section class="tarjeta ${o?"omitida":""}" data-e="${e.id}">
   <div class="ej-cab"><img src="${esc(imgDe(e))}" alt="${esc(e.nombre)}" data-act="foto" title="Cambiar foto"><div class="grow"><h3>${esc(e.nombre)}</h3><p class="suave" style="font-size:.82rem">${esc(e.musculo)} · ${e.unidad}${e.principal?" · principal":""}</p></div>
-  <button class="btn btn-peq" data-act="omitir">${o?"Incluir":"Omitir"}</button></div>
+  <div style="display:grid;gap:6px"><button class="btn btn-peq" data-act="omitir">${o?"Incluir":"Omitir"}</button><button class="btn btn-peq" data-act="uni" title="Cambiar unidad de este ejercicio">⇄ ${e.unidad==="kg"?"lbs":"kg"}</button></div></div>
   <p class="meta" data-auto="${esc(auto)}"><b>Marca a batir (${e.unidad}):</b> ${esc(marca)}${e.marca?" <i>(manual)</i>":""}${e.referencia?"<br>"+esc(e.referencia):""}${e.nota?"<br>Nota: "+esc(e.nota):""}</p>
+  ${prHtml(e)}
   <button class="enlace" data-act="meta" style="font-size:.85rem">✎ Editar marca y previo</button>
   ${rc&&rc.recomendacion.tipo==="subir"?`<p class="rec">💡 ${esc(rc.recomendacion.titulo)} — ${esc(rc.recomendacion.texto)}</p>`:""}
   ${o?"":dr.series.map((s,i)=>{const c=cmpSerie({...s,unidad:e.unidad},prev&&prev[Math.min(i,prev.length-1)]);return`<div class="serie" data-i="${i}">
-   <div class="serie-cab"><span>Serie ${i+1}</span><span>${prev?insMini(c):""} <button class="enlace" data-act="quitar" style="font-weight:600">Quitar</button></span></div>
+   <div class="serie-cab"><span>Serie ${i+1}</span><span>${esPR(e,s)?'<span class="ins mas">🏆 PR</span> ':""}${prev?insMini(c):""} <button class="enlace" data-act="quitar" style="font-weight:600">Quitar</button></span></div>
    <div class="par"><div><small>Peso (${e.unidad})</small><div class="step"><button data-act="w" data-d="${-paso}">−</button><input inputmode="decimal" data-f="peso" value="${fmt(s.peso)}"><button data-act="w" data-d="${paso}">+</button></div></div>
    <div><small>Reps</small><div class="step"><button data-act="r" data-d="-1">−</button><input inputmode="numeric" data-f="reps" value="${s.reps}"><button data-act="r" data-d="1">+</button></div></div></div>
-   <div class="rir"><small>RIR</small>${[0,1,2,3].map(r=>`<button data-act="rir" data-v="${r}" aria-pressed="${s.rir===r}">${r}</button>`).join("")}</div>
+   ${S.escala==="RPE"?`<div class="rir"><small>RPE</small>${[6,7,8,9,10].map(r=>`<button data-act="rpe" data-v="${r}" aria-pressed="${s.rpe===r}">${r}</button>`).join("")}</div>`:`<div class="rir"><small>RIR</small>${[0,1,2,3].map(r=>`<button data-act="rir" data-v="${r}" aria-pressed="${s.rir===r}">${r}</button>`).join("")}</div>`}
    <input class="nota" data-f="nota" placeholder="Nota (pausa, drop set…)" value="${esc(s.nota)}"></div>`}).join("")}
   ${o?"":'<button class="btn btn-peq" style="margin-top:10px;width:100%" data-act="mas">+ Agregar serie</button>'}</section>`}
 
@@ -258,6 +337,7 @@ function vResultado(r){const R=r.resumen,ord={"-":0,"+":1,"=":2,nuevo:3};
   return`${r.local?'<div class="aviso-r atencion">Guardado en tu teléfono. Se sube solo cuando tengas internet.</div>':""}<h2 style="margin:16px 0 2px">${DIAS[r.dia]} · ${fechaTxt(r.fecha)}</h2>
   <p class="suave">${r.previa_fecha?"Comparado con tu "+DIAS[r.dia]+" del "+fechaTxt(r.previa_fecha):"Es tu primer registro de este día: no hay con qué comparar todavía."}</p>
   <div class="chips"><div class="res mas"><strong>${R.mejoraron}</strong><small>Mejoraron</small></div><div class="res"><strong>${R.iguales}</strong><small>Iguales</small></div><div class="res menos"><strong>${R.empeoraron}</strong><small>Empeoraron</small></div></div>${al}
+  ${(r.prsNuevos||[]).length?`<div class="aviso-r"><b>🏆 Nuevo récord personal:</b> ${r.prsNuevos.map(esc).join(" · ")}</div>`:""}${r.descarga?'<div class="aviso-r atencion">Semana de descarga: este entrenamiento no cuenta para tus alertas ni marcas.</div>':""}
   ${r.ejercicios.slice().sort((a,b)=>ord[a.veredicto]-ord[b.veredicto]).map(x=>`<section class="tarjeta"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h3 style="font-size:1rem">${esc(x.nombre)}</h3>${insignia(x.veredicto)}</div>
    ${x.pct_volumen!=null?`<p class="suave" style="font-size:.82rem">Volumen total ${x.pct_volumen>0?"+":""}${x.pct_volumen}%</p>`:""}
    ${x.series.map((s,i)=>{const p=x.series_previas[Math.min(i,x.series_previas.length-1)];return`<div class="lin"><span>Serie ${i+1} ${x.series_previas.length?insMini(x.marcas[i]):""}</span><span class="num">${p?esc(serTxt(p))+" → ":""}<b>${esc(serTxt(s))}</b> ${x.unidad}</span></div>`}).join("")}
@@ -274,7 +354,7 @@ function vHistorial(){
 
 const TIPO={subir:["mas","↑ Sube"],mantener:["ig","= Mantén"],bajar:["menos","↓ Baja"],estancado:["menos","Estancado"],nuevo:["nuevo","Nuevo"]};
 function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termines un entrenamiento verás aquí tu progreso.</p>';
-  const R=P.recuperacion,d=S.pdia||S.dia,exs=P.ejercicios.filter(e=>e.dia===d),ind=R.indicadores||{};
+  const R=P.recuperacion,d=diasAct().includes(S.pdia||S.dia)?(S.pdia||S.dia):diasAct()[0],exs=P.ejercicios.filter(e=>e.dia===d),ind=R.indicadores||{};
   const ses=(S.ses||[]).filter(s=>s.dia===d).slice(0,10).reverse(),reales=ses.filter(s=>s.nota!=="Marcas iniciales");
   const M=reales.reduce((t,s)=>t+s.resumen.mejoraron,0),I=reales.reduce((t,s)=>t+s.resumen.iguales,0),B=reales.reduce((t,s)=>t+s.resumen.empeoraron,0);
   const ult=reales.length?reales[reales.length-1].resumen:null;
@@ -283,7 +363,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
   const con=exs.filter(e=>e.puntos.length),sel=con.find(e=>e.id===S.pej)||con[0];
   return`<div class="aviso-r ${R.nivel}"><h2 style="font-size:1.05rem;margin-bottom:4px">${esc(R.titulo)}</h2><b>${esc(R.hoy.mensaje)}</b><br><span style="font-size:.92rem">${esc(R.texto)}</span>
    <div class="chips" style="margin-bottom:0"><span class="ins ig">Marcas que bajaron: ${ind.peor_pct??0}%</span><span class="ins ig">Series al fallo: ${ind.rir0_pct??0}%</span><span class="ins ig">Días seguidos: ${ind.dias_seguidos??0}</span></div></div>
-  <div class="dias">${[1,2,3].map(n=>`<button class="chip" data-act="pdia" data-n="${n}" aria-pressed="${d===n}">${DIAS[n]}</button>`).join("")}</div>
+  <div class="dias">${diasAct().map(n=>`<button class="chip" data-act="pdia" data-n="${n}" aria-pressed="${d===n}">${DIAS[n]}</button>`).join("")}</div>
   <section class="tarjeta"><h2 class="t2">¿Voy mejorando en ${DIAS[d]}?</h2>${apilado(ses)}
    <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: rojo si lo mejoraste (más peso o más repeticiones), gris oscuro si quedó igual y gris claro si bajó. Si con el tiempo ves más rojo, estás progresando.</p>
    ${reales.length?`<p style="margin-top:8px"><b>${M}</b> mejoras · <b>${I}</b> iguales · <b>${B}</b> bajadas en tus últimos ${reales.length} entrenamientos. ${tendencia}</p>`:`<p style="margin-top:8px">${tendencia}</p>`}</section>
@@ -305,15 +385,147 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
 
 const marcasRec=e=>{const r=recDe(e.id),pts=r?r.puntos.slice(-2).reverse():[];
   return`<span class="ult">${pts.length?pts.map(p=>`<small><b>${fechaTxt(p.fecha)}</b> · ${esc(p.series.map(serTxt).join(" · "))}</small>`).join(""):"<small>Sin entrenamientos registrados</small>"}</span>`};
-function vRutina(){
-  return`<div style="display:flex;gap:10px;margin:14px 0"><button class="btn btn-pri" style="flex:1" data-act="nuevoej">+ Agregar ejercicio</button><button class="btn" data-act="exportar">Respaldo</button></div>
-  ${[1,2,3].map(n=>`<h2 style="font-size:1rem;margin:18px 0 6px">${n}. ${DIAS[n]}</h2><div class="lista">${S.ej.filter(e=>e.dia===n).map(e=>`<div class="fila" style="grid-template-columns:auto 1fr;align-items:center;cursor:default" data-e="${e.id}">
+function vRutina(){const ug=unidadGlobal();
+  return`<section class="tarjeta"><h2 class="t2">Ajustes</h2>
+   <p class="suave" style="font-size:.88rem">Unidad de todos tus ejercicios: <b style="color:var(--ink)">${ug==="mix"?"mixta (cada uno la suya)":ug}</b></p>
+   <div class="chips"><button class="chip" data-act="unig" data-u="kg" aria-pressed="${ug==="kg"}">Todo en kg</button><button class="chip" data-act="unig" data-u="lbs" aria-pressed="${ug==="lbs"}">Todo en lbs</button></div>
+   <p class="suave expl">Solo cambia cómo ves los pesos. Cada serie guardada conserva el peso y la unidad con que la registraste, así que el historial no pierde precisión. Para un solo ejercicio usa el botón ⇄ de su tarjeta.</p>
+   <p style="margin-top:12px;font-weight:700;font-size:.92rem">Escala de esfuerzo por serie</p>
+   <div class="chips"><button class="chip" data-act="escala" data-v="RIR" aria-pressed="${S.escala==="RIR"}">RIR (reps en reserva)</button><button class="chip" data-act="escala" data-v="RPE" aria-pressed="${S.escala==="RPE"}">RPE (esfuerzo 1-10)</button></div>
+   <p class="suave expl">Se guardan los dos valores (RPE ≈ 10 − RIR), elijas la escala que elijas.</p></section>
+  <div style="display:flex;gap:10px;margin:14px 0"><button class="btn btn-pri" style="flex:1" data-act="nuevoej">+ Agregar ejercicio</button><button class="btn" data-act="exportar">Respaldo</button></div>
+  ${[1,2,3].map(n=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:18px 0 6px"><h2 style="font-size:1rem;margin:0">${n}. ${DIAS[n]}</h2><button class="btn btn-peq btn-pel" data-act="delrut" data-n="${n}" ${S.ej.some(e=>e.dia===n)?"":"disabled"}>Eliminar rutina</button></div><div class="lista">${S.ej.filter(e=>e.dia===n).map(e=>`<div class="fila" style="grid-template-columns:auto 1fr;align-items:center;cursor:default" data-e="${e.id}">
    <img src="${esc(imgDe(e))}" alt="" data-act="foto" style="width:52px;height:52px;border-radius:12px;object-fit:cover;cursor:pointer"><span><b>${esc(e.nombre)}</b><br><small class="suave">${esc(e.musculo)} · ${e.unidad}</small>${marcasRec(e)}
-   <span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-peq" data-act="foto">Foto</button><button class="btn btn-peq" data-act="verpg" data-id="${e.id}">Progreso</button><button class="btn btn-peq" data-act="editar">Editar</button><button class="btn btn-peq btn-pel" data-act="borrar">Quitar</button></span></span></div>`).join("")||'<p class="suave" style="padding:12px">Sin ejercicios.</p>'}</div>`).join("")}`}
+   <span style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-peq" data-act="foto">Foto</button><button class="btn btn-peq" data-act="verpg" data-id="${e.id}">Progreso</button><button class="btn btn-peq" data-act="editar">Editar</button><button class="btn btn-peq btn-pel" data-act="borrar">Quitar</button></span></span></div>`).join("")||'<p class="suave" style="padding:12px">Rutina vacía: no aparece en Entrenar. Usa «+ Agregar ejercicio» y elige este día para recrearla.</p>'}</div>`).join("")}`}
 
 function render(){document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===S.vista));
   $("sub").textContent=S.vista==="entrenar"?DIAS[S.dia]:"";
-  $("vista").innerHTML=S.res&&S.vista==="entrenar"?`<button class="enlace" data-act="volver">← Volver a entrenar</button>${vResultado(S.res)}`:S.vista==="entrenar"?vEntrenar():S.vista==="progreso"?vProgreso():S.vista==="historial"?vHistorial():vRutina()}
+  $("vista").innerHTML=S.res&&S.vista==="entrenar"?`<button class="enlace" data-act="volver">← Volver a entrenar</button>${vResultado(S.res)}`:S.vista==="entrenar"?vEntrenar():S.vista==="progreso"?vProgreso():S.vista==="historial"?vHistorial():S.vista==="guias"?vGuias():vRutina();
+  document.documentElement.style.setProperty("--hh",document.querySelector("header").offsetHeight+"px")}
+
+/* ---------- eliminar rutina diaria ---------- */
+let rutDel=0;
+function abrirRutina(n){rutDel=n;const c=S.ej.filter(e=>e.dia===n).length;$("rtNombre").textContent=`${n}. ${DIAS[n]} · ${c} ejercicio${c===1?"":"s"}`;$("rtHist").checked=false;$("rtError").textContent="";$("dlgRutina").showModal()}
+$("rtCancel").onclick=()=>$("dlgRutina").close();
+$("rtOk").onclick=async()=>{const h=$("rtHist").checked;
+  try{await api("/rutinas/"+rutDel+"?historial="+h,{method:"DELETE"});delete S.draft[rutDel];guardarBorrador();$("dlgRutina").close();aviso("Rutina eliminada");await refrescar()}
+  catch(x){if(x.message!=="clave")$("rtError").textContent=x.red?"Necesitas internet para eliminar una rutina.":x.message}};
+
+/* ---------- guías: descarga y sueño ---------- */
+/*LOGICA-GUIAS*/
+const pasoC=(u,n)=>u==="lbs"?5:(/mancuerna/i.test(n)?2:2.5);
+const MODOS={volumen:{n:"Volumen",f:1,s:.5,t:"−50% de series, mismo peso"},intensidad:{n:"Carga",f:.85,s:1,t:"−15% de peso, mismas series"},ambos:{n:"Ambos",f:.9,s:.6,t:"−40% de series y −10% de peso"}};
+function planDescarga(e,ss,modo){const m=MODOS[modo],n=ss.length,top=Math.max(...ss.map(x=>pU(x.peso,x.unidad,e.unidad))),paso=pasoC(e.unidad,e.nombre);
+  return{antes:n,pesoAntes:top,series:m.s===1?n:Math.max(1,Math.round(n*m.s)),peso:m.f===1?top:Math.max(paso,Math.round(top*m.f/paso)*paso)}}
+const hm=m=>{m=((Math.round(m)%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+const mh=t=>{const[h,m]=String(t||"0:0").split(":").map(Number);return(h||0)*60+(m||0)};
+function planSueno(cur,obj,wake,paso=30,cada=3){const d=(((cur-obj)%1440)+1440)%1440;
+  if(d===0)return{ok:false,msg:"Tu hora actual ya es la hora objetivo."};
+  if(d>360)return{ok:false,msg:"La hora objetivo queda más tarde que la actual, o el cambio supera 6 horas. Elige un objetivo más cercano y repite el plan por etapas."};
+  const pasos=Math.ceil(d/paso);return{ok:true,d,pasos,dias:pasos*cada,fil:Array.from({length:pasos},(_,i)=>{const a=Math.min((i+1)*paso,d);return{desde:i*cada+1,hasta:(i+1)*cada,cama:cur-a,desp:wake-a}})}}
+/*FIN-LOGICA-GUIAS*/
+
+const NIV={ok:["ig","Sin señales de descarga","Tus números no muestran fatiga acumulada. Si todo sigue subiendo, no hace falta descargar «por si acaso»."],
+  vigilar:["menos","Vigila tu fatiga","Hay señales, pero todavía no son suficientes. Cuida sueño y comida y vuelve a mirar tras 1 o 2 entrenamientos."],
+  recomendada:["menos","Descarga recomendada","Varias señales independientes coinciden. Programa una semana de descarga."],
+  en_curso:["mas","Descarga en curso","Registra tus entrenamientos con normalidad: no cuentan para alertas ni marcas."],
+  sin_datos:["nuevo","Aún sin datos suficientes","Necesito al menos 4 entrenamientos reales para detectar tendencias."]};
+
+function vGuias(){return`<div class="dias"><button class="chip" data-act="guia" data-n="descarga" aria-pressed="${S.guia!=="sueno"}">Descarga</button><button class="chip" data-act="guia" data-n="sueno" aria-pressed="${S.guia==="sueno"}">Sueño</button></div>${S.guia==="sueno"?vSueno():vDescarga()}`}
+
+function vDescarga(){const D=S.desc,n=D&&NIV[D.nivel]?NIV[D.nivel]:NIV.sin_datos,d=diasAct().includes(S.gdia||S.dia)?(S.gdia||S.dia):diasAct()[0],modo=S.gmodo;
+  const hechos=(S.ultimas[d]||{}).ejercicios||{},filas=S.ej.filter(e=>e.dia===d&&hechos[e.id]&&hechos[e.id].length).map(e=>({e,p:planDescarga(e,hechos[e.id],modo)}));
+  return`<section class="tarjeta"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><h2 class="t2" style="margin:0">¿Necesito descargar?</h2><span class="ins ${n[0]}">${n[1]}</span></div>
+   <p style="margin-top:8px;font-size:.92rem">${n[2]}</p>
+   ${D&&D.senales&&D.senales.length?`<div style="margin-top:8px">${D.senales.map(x=>`<div class="senal"><span>${{rendimiento:"📉",estancamiento:"➖",esfuerzo:"🔥",tiempo:"🗓️"}[x.tipo]||"•"}</span><span>${esc(x.texto)}</span></div>`).join("")}</div>`:""}
+   ${D&&D.nivel==="en_curso"?`<p style="margin-top:10px"><b>Día ${D.dias} de 7.</b> Termina esta semana con RIR 3-4 y vuelve a tus pesos normales después.</p><button class="btn btn-peq btn-pel" data-act="descnc">Cancelar descarga</button>`
+     :`<p class="suave expl">Semanas seguidas entrenando: <b style="color:var(--ink)">${D?D.semanas:0}</b>${D&&D.ultima?" · última descarga marcada: "+fechaTxt(D.ultima):""}</p>
+       <button class="btn ${D&&D.nivel==="recomendada"?"btn-pri":""}" style="width:100%;margin-top:8px" data-act="descini">Empezar mi semana de descarga hoy</button>
+       <p class="suave expl">Al empezarla, durante 7 días tus entrenamientos se marcan como descarga: no disparan alertas de fatiga ni se usan como marca a superar.</p>`}</section>
+
+  <section class="tarjeta"><h2 class="t2">Tu plan de descarga</h2>
+   <div class="dias" style="margin-top:0">${Object.entries(MODOS).map(([k,m])=>`<button class="chip" data-act="gmodo" data-n="${k}" aria-pressed="${modo===k}">${m.n}</button>`).join("")}</div>
+   <p class="suave expl" style="margin-top:0"><b style="color:var(--ink)">${MODOS[modo].t}.</b> En todas las series: misma técnica, mismas repeticiones y <b style="color:var(--ink)">RIR 3-4</b> (para antes de sentirte al límite). Mantén los mismos días de entrenamiento.</p>
+   <div class="dias">${diasAct().map(k=>`<button class="chip" data-act="gdia" data-n="${k}" aria-pressed="${d===k}">${DIAS[k]}</button>`).join("")}</div>
+   ${filas.map(({e,p})=>`<div class="tabla"><b>${esc(e.nombre)}</b><span class="num"><b style="color:var(--verde-osc)">${p.series}×${fmt(p.peso)} ${e.unidad}</b></span><small>Normal: ${p.antes} series con ${fmt(p.pesoAntes)} ${e.unidad}</small></div>`).join("")||'<p class="suave">Aún no hay entrenamientos de este día para calcular tu plan.</p>'}
+   <p class="suave expl">Los porcentajes son una heurística práctica de la experiencia de entrenadores, no un estándar científico: ajústalos a cómo te sientas.</p></section>
+
+  <details class="tarjeta gp"><summary>¿Qué es una descarga (y qué no)?</summary>
+   <p>Es un periodo breve y planificado de <b>menos estrés de entrenamiento</b> para reducir la fatiga física y mental y llegar mejor al siguiente bloque. Es la definición del consenso internacional de entrenadores de fuerza y físico (Bell et al., 2023).</p>
+   <p>No es una pausa por lesión o enfermedad, ni un «taper» de competencia (que busca un pico en una fecha concreta). Sigues entrenando; solo bajas la carga total.</p>
+   <p><b>Nivel de evidencia:</b> lo que se sabe de descargas en fuerza e hipertrofia viene sobre todo de consensos de expertos y encuestas, con muy pocos ensayos. Por eso la app te da señales y rangos, no reglas rígidas.</p></details>
+
+  <details class="tarjeta gp"><summary>¿Cuándo programarla?</summary>
+   <p>Hay dos enfoques, y se pueden combinar:</p>
+   <ul><li><b>Planificada:</b> cada 4 a 8 semanas según el ciclo de entrenamiento. En una encuesta a atletas de fuerza y físico, el promedio fue una descarga de ~6 días cada ~5,6 semanas (Rogerson et al., 2024).</li>
+   <li><b>Reactiva (autorregulada):</b> cuando aparece una caída de rendimiento o fatiga inesperada (Bell et al., 2025).</li></ul>
+   <p>Señales que la app vigila y que deberían coincidir <b>más de una a la vez</b>:</p>
+   <ul><li><b>Rendimiento a la baja</b> en 2 sesiones seguidas del mismo ejercicio principal.</li><li><b>Estancamiento en varios ejercicios</b> (la fuerza estimada no sube en 3 sesiones).</li><li><b>Esfuerzo siempre al límite:</b> la mayoría de series al fallo (RIR 0) o el mismo peso se siente cada vez más pesado.</li><li><b>Tiempo:</b> más de 5-8 semanas sin bajar la carga.</li><li><b>Señales que tú notas y la app no ve:</b> sueño peor, poca motivación, molestias articulares que no se van.</li></ul>
+   <p><b>Un solo ejercicio estancado no es fatiga.</b> Antes de descargar revisa progresión (¿saltos demasiado grandes?), técnica, sueño y comida.</p></details>
+
+  <details class="tarjeta gp"><summary>¿Cómo? Volumen vs. intensidad</summary>
+   <p>Según el consenso de expertos, lo más habitual es <b>reducir el volumen</b> (series, repeticiones o ejercicios) <b>manteniendo o bajando ligeramente la carga</b>, y mantener la frecuencia de entrenamiento. Las sesiones quedan más cortas (Bell et al., 2023).</p>
+   <ul><li><b>Volumen (opción por defecto):</b> mismo peso, ~50% de las series, RIR 3-4. Encaja con fatiga general, series al fallo constantes y cansancio. Mantener la carga conserva el estímulo neuromuscular.</li>
+   <li><b>Carga:</b> −10 a −20% de peso, mismas series. Útil si hay molestias en articulaciones o tendones, o si tu técnica se deteriora con cargas altas.</li>
+   <li><b>Ambos:</b> ~40% menos de series y ~10% menos de peso, tras bloques muy duros o con mucha fatiga.</li></ul>
+   <p>Apoyo indirecto: en un meta-análisis de tapering, la estrategia más eficaz fue reducir el volumen un 41-60% <b>sin bajar intensidad ni frecuencia</b> (Bosquet et al., 2007). Ojo: se hizo sobre todo con atletas de competencia, así que se usa como analogía, no como prueba directa para ti.</p></details>
+
+  <details class="tarjeta gp"><summary>¿Y si paro del todo?</summary>
+   <p>En un ensayo con 39 personas entrenadas, una semana <b>sin entrenar</b> a mitad de un programa de 9 semanas no mejoró la hipertrofia, y la fuerza de tren inferior mejoró menos que en quienes siguieron entrenando (Coleman et al., 2024).</p>
+   <p>Conclusión práctica: <b>no pares del todo «a ciegas»</b>. Reserva el descanso completo para enfermedad, viaje, estrés vital fuerte o dolor. Si tienes dudas, una descarga parcial (con entrenamiento ligero) es la opción prudente.</p></details>
+
+  <details class="tarjeta gp"><summary>Duración y vuelta al entrenamiento</summary>
+   <ul><li><b>Duración:</b> unos 5 a 7 días. En la encuesta de atletas fue de ~6,4 días.</li><li><b>Después:</b> vuelve a tus pesos normales (la app vuelve a usar tu último entrenamiento normal como marca a superar). Dale 1 o 2 sesiones para recuperar el ritmo.</li><li><b>Si tras descargar sigues cayendo</b> o el cansancio dura semanas, el problema probablemente no es el programa: revisa sueño, calorías y proteína, estrés y salud general. El sobreentrenamiento no se arregla con una semana, puede tardar semanas o meses y conviene consultarlo con un profesional (Meeusen et al., 2013).</li><li><b>Dolor ≠ cansancio:</b> si hay dolor localizado o que empeora, no es un tema de descarga; consulta a un profesional.</li></ul></details>
+
+  <details class="tarjeta gp"><summary>Fuentes</summary><p class="fuentes">Bell L, Strafford BW, Coleman M, Androulakis Korakakis P, Nolan D (2023). Integrating deloading into strength and physique sports training programmes: an international Delphi consensus approach. <i>Sports Med Open</i> 9:87.<br>Rogerson D, Nolan D, Androulakis Korakakis P, Immonen V, Wolf M, Bell L (2024). Deloading practices in strength and physique sports: a cross-sectional survey. <i>Sports Med Open</i>.<br>Bell L, Darragh I, Kyle TS, Rogerson D, Nolan D (2025). A practical approach to deloading: recommendations and considerations for strength and physique sports. <i>Strength Cond J</i>.<br>Coleman M, Burke R, Augustin F, et al. (2024). Gaining more from doing less? The effects of a one-week deload period during supervised resistance training on muscular adaptations. <i>PeerJ</i> 12:e16777.<br>Bosquet L, Montpetit J, Arvisais D, Mujika I (2007). Effects of tapering on performance: a meta-analysis. <i>Med Sci Sports Exerc</i> 39(8):1358-65.<br>Meeusen R, Duclos M, Foster C, et al. (2013). Prevention, diagnosis and treatment of the overtraining syndrome: joint consensus statement of ECSS and ACSM. <i>Eur J Sport Sci</i> 13(1):1-24.</p>
+   <p class="fuentes">Esta guía es educativa y no reemplaza a un profesional de la salud.</p></details>`}
+
+function vSueno(){const n=S.sn,cur=mh(n.cur),obj=mh(n.obj),wake=mh(n.wake),P=planSueno(cur,obj,wake),bed=obj,wk=P.ok?wake-P.d:wake;
+  return`<section class="tarjeta"><h2 class="t2">Plan gradual para acostarte más temprano</h2>
+   <p class="suave expl" style="margin-top:0">Sin cambios bruscos: adelantas tu hora de dormir y de despertar <b style="color:var(--ink)">30 minutos cada 3 días</b>, en vez de intentar acostarte 3 horas antes de golpe.</p>
+   <div class="tri"><div><label for="snc">Hoy me duermo a las</label><input id="snc" type="time" data-sn="cur" value="${esc(n.cur)}"></div><div><label for="snw">Hoy me levanto a las</label><input id="snw" type="time" data-sn="wake" value="${esc(n.wake)}"></div><div><label for="sno">Quiero dormirme a las</label><input id="sno" type="time" data-sn="obj" value="${esc(n.obj)}"></div></div>
+   ${P.ok?`<p style="margin:12px 0 6px"><b>${P.dias} días</b> (${P.pasos} etapas) para llegar a tu objetivo.</p>${P.fil.map(f=>`<div class="tabla"><b>Días ${f.desde}-${f.hasta}</b><span class="num">dormir <b style="color:var(--verde-osc)">${hm(f.cama)}</b> · levantar <b style="color:var(--verde-osc)">${hm(f.desp)}</b></span></div>`).join("")}
+     <p class="suave expl">Si una etapa te cuesta, repítela unos días más antes de avanzar. Avanzar lento es mejor que abandonar.</p>
+     <h3 style="font-size:1.05rem;margin:14px 0 6px">Tu reloj en la meta (dormir ${hm(bed)} · levantar ${hm(wk)})</h3>
+     <div class="reloj"><b>${hm(wk)}</b><span>Levantarte y recibir <b style="color:var(--ink)">luz natural</b> en la primera hora (10-30 min afuera).</span>
+      <b>${hm(bed-480)}</b><span>Última cafeína (8 h antes de dormir).</span>
+      <b>${hm(bed-180)}</b><span>Última comida abundante.</span>
+      <b>${hm(bed-120)}</b><span>Termina el entrenamiento intenso (si entrenas de noche) y baja las luces.</span>
+      <b>${hm(bed-90)}</b><span>Ducha tibia de ~10 min.</span>
+      <b>${hm(bed-60)}</b><span>Pantallas fuera o en modo tranquilo; rutina de calma.</span>
+      <b>${hm(bed)}</b><span>A la cama, con sueño.</span></div>`:`<p class="aviso-r atencion" style="margin-top:12px">${P.msg}</p>`}</section>
+
+  <details class="tarjeta gp" open><summary>1. Por qué te cuesta dormir temprano</summary>
+   <p>Tu reloj biológico interno dura un poco más de 24 h y la <b>luz</b> lo ajusta cada día. La luz de la mañana lo adelanta; la de la noche lo atrasa (Khalsa et al., 2003). Si te acuestas tarde, te levantas tarde y te da poca luz de mañana, el reloj se queda corrido, y por eso adelantar la hora de acostarte «a la fuerza» suele fallar: tu cuerpo todavía no está listo para dormir.</p>
+   <p>La clave es mover el reloj <b>poco a poco</b>, con luz por la mañana y menos luz por la noche. Por eso el plan avanza en pasos de 30 minutos.</p></details>
+
+  <details class="tarjeta gp"><summary>2. Luz: lo que más mueve el reloj</summary>
+   <ul><li><b>Mañana:</b> sal a la luz natural en la primera hora tras despertar, 10 a 30 minutos. Incluso nublado, afuera hay mucha más luz que en una habitación.</li><li><b>Noche:</b> en las 2 horas previas a dormir, baja las luces del hogar y usa lámparas cálidas. La luz brillante de noche suprime la melatonina (Gooley et al., 2011).</li><li><b>Pantallas:</b> reduce brillo y tiempo; el contenido que te activa (redes, trabajo, juegos) pesa tanto como la luz. Ponlas a un lado 30-60 minutos antes.</li></ul></details>
+
+  <details class="tarjeta gp"><summary>3. Una hora fija de levantarte</summary>
+   <p>Tu hora de despertar es el ancla del reloj. Intenta mantenerla con una variación de ±1 h, <b>también en fin de semana</b>. Dormir mucho más los fines de semana crea un «jet lag social» y no compensa la falta de sueño de la semana (Depner et al., 2019).</p>
+   <p>Si trasnochaste, levántate a tu hora (o con máximo 1 h de diferencia) y cubre el sueño con una siesta corta, no con una mañana entera en la cama.</p></details>
+
+  <details class="tarjeta gp"><summary>4. Antes de dormir: temperatura, comida y cafeína</summary>
+   <ul><li><b>Ducha o baño tibio</b> (40-42,5 °C) de ~10 minutos, 1 a 2 horas antes de acostarte: en un meta-análisis mejoró la calidad del sueño y redujo ~10 minutos el tiempo en dormirse. A solo 15 minutos antes no funcionó igual (Haghayegh et al., 2019).</li><li><b>Cafeína:</b> corta al menos 6 a 8 horas antes de dormir. En un estudio, 400 mg tomados 6 h antes aún redujeron el sueño en más de una hora (Drake et al., 2013). Recuerda que el pre-entreno cuenta.</li><li><b>Cena:</b> evita comidas muy pesadas en las 2-3 h previas. Un snack ligero es válido si tienes hambre.</li><li><b>Alcohol:</b> te da sueño, pero fragmenta el sueño de la 2.ª mitad de la noche.</li><li><b>Habitación:</b> oscura y fresca.</li></ul></details>
+
+  <details class="tarjeta gp"><summary>5. Si tardas más de 20-30 min en dormirte</summary>
+   <p>Quedarte dando vueltas enseña al cerebro que la cama es para estar despierto. Si no te duermes en ~20-30 minutos, levántate, ve a otra habitación con luz tenue, haz algo tranquilo (leer en papel, estirar suave) y vuelve cuando tengas sueño. No mires el reloj ni te quedes «recuperando» en la cama por la mañana. Es el principio de <b>control de estímulos</b> de la terapia cognitivo-conductual para el insomnio (TCC-I).</p>
+   <p>Si tu mente se dispara con pendientes, escribe una lista breve de lo que tienes que hacer mañana antes de acostarte.</p></details>
+
+  <details class="tarjeta gp"><summary>6. Ejercicio y sueño</summary>
+   <ul><li>Entrenar con regularidad suele mejorar el sueño.</li><li>Entrenar de noche no perjudica el sueño en general, pero el ejercicio <b>vigoroso que termina menos de 1 hora antes de acostarte</b> sí puede retrasar el quedarte dormido (Stutz et al., 2019). Por prudencia, termina al menos 1-2 h antes.</li><li>Si solo puedes entrenar tarde, baja la intensidad al final y termina con 5-10 minutos de enfriamiento suave.</li></ul></details>
+
+  <details class="tarjeta gp"><summary>7. Siestas y noches que no puedes evitar</summary>
+   <ul><li><b>Siesta:</b> 20-30 minutos y antes de las 3 p. m. Más larga o más tarde te quita sueño de la noche.</li><li><b>Noche corta (menos de 6 h):</b> mantén la hora de levantarte, toma luz por la mañana y acuéstate un poco antes la noche siguiente. No sumes cafeína tarde para compensar.</li><li><b>Entrenar con poco sueño:</b> la falta de sueño empeora el rendimiento físico y la recuperación (Craven et al., 2022). Ese día entrena igual pero con más reserva (RIR 2-3 y sin buscar récords) o recorta una serie por ejercicio. Es una regla práctica, no un protocolo validado. Si lo repites varios días, cuenta como fatiga acumulada en la guía de descarga.</li></ul></details>
+
+  <details class="tarjeta gp"><summary>8. Melatonina y cuándo consultar</summary>
+   <p>La guía clínica de la AASM (2015) da una recomendación débil a favor de la melatonina tomada a una hora estratégica en el síndrome de fase retrasada del sueño; la luz matutina tiene base fisiológica pero la guía no la recomienda formalmente por falta de ensayos. Es un tema para hablar con un médico: la hora y la dosis importan, y más no es mejor.</p>
+   <p><b>Consulta a un profesional si:</b></p>
+   <ul><li>Tienes dificultad para dormir al menos 3 noches por semana durante 3 meses o más. La TCC-I es el tratamiento de primera línea (Qaseem et al., 2016).</li><li>Aun siguiendo el plan 3-4 semanas no logras dormirte antes de la madrugada.</li><li>Roncas fuerte, notas pausas al respirar o tienes somnolencia peligrosa (manejando, por ejemplo).</li></ul></details>
+
+  <details class="tarjeta gp"><summary>Fuentes</summary><p class="fuentes">Khalsa SBS, Jewett ME, Cajochen C, Czeisler CA (2003). A phase response curve to single bright light pulses in human subjects. <i>J Physiol</i> 549:945-52.<br>Gooley JJ, Chamberlain K, Smith KA, et al. (2011). Exposure to room light before bedtime suppresses melatonin onset and shortens melatonin duration in humans. <i>J Clin Endocrinol Metab</i> 96:E463-72.<br>Depner CM, Melanson EL, McHill AW, Wright KP (2019). Ad libitum weekend recovery sleep fails to prevent metabolic dysregulation during a repeating pattern of insufficient sleep and weekend recovery sleep. <i>Curr Biol</i> 29:957-67.<br>Haghayegh S, Khoshnevis S, Smolensky MH, et al. (2019). Before-bedtime passive body heating by warm shower or bath to improve sleep: a systematic review and meta-analysis. <i>Sleep Med Rev</i> 46:124-35.<br>Drake C, Roehrs T, Shambroom J, Roth T (2013). Caffeine effects on sleep taken 0, 3, or 6 hours before going to bed. <i>J Clin Sleep Med</i> 9:1195-1200.<br>Stutz J, Eiholzer R, Spengler CM (2019). Effects of evening exercise on sleep in healthy participants: a systematic review and meta-analysis. <i>Sports Med</i> 49:269-87.<br>Craven J, McCartney D, Desbrow B, et al. (2022). Effects of acute sleep loss on physical performance: a systematic and meta-analytical review. <i>Sports Med</i> 52:2669-90.<br>Auger RR, Burgess HJ, Emens JS, et al. (2015). Clinical practice guideline for the treatment of intrinsic circadian rhythm sleep-wake disorders. <i>J Clin Sleep Med</i> 11:1199-236.<br>Qaseem A, Kansagara D, Forciea MA, et al. (2016). Management of chronic insomnia disorder in adults: a clinical practice guideline from the ACP. <i>Ann Intern Med</i> 165:125-33.</p>
+   <p class="fuentes">Guía educativa; no reemplaza a un profesional de la salud.</p></details>`}
 
 /* ---------- ejercicio nuevo / editar ---------- */
 let editando=null;
@@ -321,7 +533,7 @@ function ajustarSeries(e){const d=(S.draft[e.dia]||{})[e.id];if(!d||!e.n_series)
   while(d.series.length>e.n_series)d.series.pop();
   while(d.series.length<e.n_series){const l=d.series[d.series.length-1]||{peso:0,reps:0};d.series.push({peso:l.peso,reps:l.reps,rir:null,nota:""})}guardarBorrador()}
 function abrirEj(e){editando=e||null;$("ejTitulo").textContent=e?"Editar ejercicio":"Agregar ejercicio";$("ejNombre").value=e?e.nombre:"";$("ejMus").value=e?e.musculo:MUS[0];
-  $("ejDia").value=e?e.dia:S.dia;$("ejUni").value=e?e.unidad:"kg";$("ejNota").value=e?e.nota:"";$("ejMarca").value=e?e.marca||"":"";$("ejSeries").value=e&&e.n_series?e.n_series:"";$("ejError").textContent="";$("dlgEj").showModal()}
+  $("ejDia").value=e?e.dia:S.dia;$("ejUni").value=e?e.unidad:(unidadGlobal()==="mix"?"kg":unidadGlobal());$("ejNota").value=e?e.nota:"";$("ejMarca").value=e?e.marca||"":"";$("ejSeries").value=e&&e.n_series?e.n_series:"";$("ejError").textContent="";$("dlgEj").showModal()}
 $("ejMus").innerHTML=MUS.map(m=>`<option>${m}</option>`).join("");$("ejDia").innerHTML=[1,2,3].map(n=>`<option value="${n}">${n}. ${DIAS[n]}</option>`).join("");
 $("mtCancel").onclick=()=>$("dlgMeta").close();
 $("mtOk").onclick=async()=>{const b={marca:$("mtMarca").value.trim(),referencia:$("mtPrevio").value.trim()};
@@ -336,9 +548,10 @@ $("ejOk").onclick=async()=>{const b={nombre:$("ejNombre").value.trim(),musculo:$
 
 /* ---------- datos, guardado sin internet y sincronización ---------- */
 async function refrescar(){try{await sincronizar();const d=await api("/inicio");S.sinRed=false;S.ej=d.ejercicios;
-    if(!cola().length){S.ultimas=d.ultimas;S.alertas=d.alertas;S.pg=d.progreso;S.ses=d.sesiones}
+    if(!cola().length){S.ultimas=d.ultimas;S.alertas=d.alertas;S.pg=d.progreso;S.ses=d.sesiones;S.prs=d.prs||{};S.desc=d.descarga||null;S.aj=d.ajustes||{}}
     guardarCache();render();sincImgs()}catch(e){if(e.red){S.sinRed=true;render()}else falla(e)}}
-async function sincronizar(){let q=cola();if(!q.length)return;const resto=[];let ok=0;
+async function sincronizar(){const c=cfg();if(c.length){const r=[];for(let i=0;i<c.length;i++){try{await ejecutarCfg(c[i])}catch(e){if(e.red||e.message==="clave"){r.push(...c.slice(i));break}}}ls("gym_cfg",r.length?r:null)}
+  let q=cola();if(!q.length)return;const resto=[];let ok=0;
   for(let i=0;i<q.length;i++){try{await api("/sesiones",{method:"POST",body:q[i]});ok++}
     catch(e){if(e.red||e.message==="clave"){resto.push(...q.slice(i));break}aviso("Un entrenamiento guardado no se pudo subir: "+e.message,"error")}}
   ls("gym_cola",resto.length?resto:null);if(ok)aviso(ok+" entrenamiento(s) subido(s)")}
@@ -347,16 +560,18 @@ function resultadoLocal(c){const pf=(S.ultimas[c.dia]||{}).fecha||null,prev=(S.u
   const ejercicios=Object.entries(por).map(([id,ss])=>{const p=prev[id],cm=cmpEj(ss,p),e=S.ej.find(x=>x.id==id);
     return{ejercicio_id:+id,nombre:e?e.nombre:"",unidad:ss[0].unidad,veredicto:cm.v,marcas:cm.m,pct_volumen:cm.pct,series:ss,series_previas:p||[]}});
   const n=v=>ejercicios.filter(x=>x.veredicto===v).length;
-  S.ultimas[c.dia]={fecha:c.fecha,ejercicios:por};
-  return{id:0,fecha:c.fecha,dia:c.dia,previa_fecha:pf,resumen:{mejoraron:n("+"),iguales:n("="),empeoraron:n("-"),nuevos:n("nuevo")},ejercicios,alertas:[],local:true}}
+  if(!c.descarga)S.ultimas[c.dia]={fecha:c.fecha,ejercicios:por};
+  return{id:0,fecha:c.fecha,dia:c.dia,previa_fecha:pf,resumen:{mejoraron:n("+"),iguales:n("="),empeoraron:n("-"),nuevos:n("nuevo")},ejercicios,alertas:[],local:true,descarga:!!c.descarga}}
 async function terminar(){const d=borrador(),series=[];
-  S.ej.filter(e=>e.dia===S.dia&&!d[e.id].omitir).forEach(e=>d[e.id].series.forEach(s=>series.push({ejercicio_id:e.id,peso:+s.peso||0,reps:Math.round(+s.reps)||0,rir:s.rir,nota:s.nota||""})));
+  const hechos=S.ej.filter(e=>e.dia===S.dia&&!d[e.id].omitir),nuevos=[];
+  hechos.forEach(e=>{if(d[e.id].series.some(s=>superaPR(e,s)))nuevos.push(e.nombre);
+    d[e.id].series.forEach(s=>{const r=real(e,s);series.push({ejercicio_id:e.id,peso:r.peso,unidad:r.unidad,reps:Math.round(+s.reps)||0,rir:s.rir??null,rpe:s.rpe??null,nota:s.nota||""})})});
   if(!series.length)return aviso("No hay series para guardar","error");
   if(!confirm("¿Terminar y guardar este entrenamiento de "+DIAS[S.dia]+"?"))return;
-  const c={dia:S.dia,fecha:hoyCol(),cliente:uid(),series};
-  try{S.res=await api("/sesiones",{method:"POST",body:c});S.sinRed=false;delete S.draft[S.dia];guardarBorrador();scrollTo(0,0);render();refrescar()}
+  const c={dia:S.dia,fecha:hoyCol(),cliente:uid(),series,descarga:!!(S.desc&&S.desc.nivel==="en_curso")};
+  try{S.res=await api("/sesiones",{method:"POST",body:c});S.res.prsNuevos=nuevos;S.sinRed=false;delete S.draft[S.dia];guardarBorrador();scrollTo(0,0);render();refrescar()}
   catch(e){if(!e.red)return falla(e);
-    ls("gym_cola",[...cola(),c]);S.sinRed=true;S.res=resultadoLocal(c);delete S.draft[S.dia];guardarBorrador();guardarCache();scrollTo(0,0);render()}}
+    ls("gym_cola",[...cola(),c]);S.sinRed=true;S.res=resultadoLocal(c);S.res.prsNuevos=nuevos;hechos.forEach(e=>actualizarPR(e,d[e.id].series));delete S.draft[S.dia];guardarBorrador();guardarCache();scrollTo(0,0);render()}}
 async function irHistorial(){S.vista="historial";S.res=null;render();try{S.ses=await api("/sesiones");guardarCache();render()}catch(e){if(!S.ses)falla(e)}}
 
 document.addEventListener("click",async ev=>{
@@ -374,9 +589,10 @@ document.addEventListener("click",async ev=>{
   else if(a==="pdia"){S.pdia=+t.dataset.n;S.pej=0}
   else if(a==="meta"){const sec=t.closest("[data-e]");return abrirMeta(S.ej.find(q=>q.id===+sec.dataset.e),sec.querySelector(".meta").dataset.auto)}
   else if(a==="omitir"){dr.omitir=!dr.omitir;guardarBorrador()}
-  else if(a==="w"){s.peso=Math.max(0,+(+s.peso+ +t.dataset.d).toFixed(2));guardarBorrador()}
+  else if(a==="w"){s.peso=Math.max(0,+(+s.peso+ +t.dataset.d).toFixed(2));s.orig={p:s.peso,u:e.unidad};guardarBorrador()}
   else if(a==="r"){s.reps=Math.max(0,(+s.reps||0)+ +t.dataset.d);guardarBorrador()}
-  else if(a==="rir"){s.rir=s.rir===+t.dataset.v?null:+t.dataset.v;guardarBorrador()}
+  else if(a==="rir"){s.rir=s.rir===+t.dataset.v?null:+t.dataset.v;s.rpe=s.rir==null?null:10-s.rir;guardarBorrador()}
+  else if(a==="rpe"){const v=+t.dataset.v;s.rpe=s.rpe===v?null:v;s.rir=s.rpe==null?null:Math.max(0,Math.floor(10-s.rpe));guardarBorrador()}
   else if(a==="quitar"){dr.series.splice(+fila.dataset.i,1);guardarBorrador()}
   else if(a==="mas"){const u=dr.series[dr.series.length-1]||{peso:0,reps:0,rir:null};dr.series.push({peso:u.peso,reps:u.reps,rir:u.rir,nota:""});guardarBorrador()}
   else if(a==="foto"){fotoDe=e.id;$("archivo").click();return}
@@ -386,21 +602,35 @@ document.addEventListener("click",async ev=>{
   else if(a==="nuevoej"){return abrirEj()}
   else if(a==="editar"){return abrirEj(e)}
   else if(a==="borrar"){if(!confirm("¿Quitar "+e.nombre+" de tu rutina? Tu historial se conserva."))return;await api("/ejercicios/"+e.id,{method:"DELETE"});S.ej=S.ej.filter(x=>x!==e);guardarCache();refrescar()}
+  else if(a==="uni"){return setUnidad([e],e.unidad==="kg"?"lbs":"kg",false)}
+  else if(a==="unig"){return setUnidad(S.ej,t.dataset.u||(unidadGlobal()==="kg"?"lbs":"kg"),true)}
+  else if(a==="escala"){S.escala=t.dataset.v;ls("gym_escala",S.escala)}
+  else if(a==="delrut"){return abrirRutina(+t.dataset.n)}
+  else if(a==="limpiarq"){S.q=""}
+  else if(a==="guia"){S.guia=t.dataset.n;scrollTo(0,0)}
+  else if(a==="verguia"){S.vista="guias";S.guia="descarga";scrollTo(0,0)}
+  else if(a==="gmodo"){S.gmodo=t.dataset.n}
+  else if(a==="gdia"){S.gdia=+t.dataset.n}
+  else if(a==="descini"){await api("/descarga",{method:"POST"});aviso("Descarga iniciada: 7 días");await refrescar();return}
+  else if(a==="descnc"){if(!confirm("¿Cancelar la descarga en curso?"))return;await api("/descarga",{method:"DELETE"});await refrescar();return}
   else if(a==="exportar"){const d=await api("/exportar"),l=document.createElement("a");l.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:"application/json"}));l.download="gimnasio-respaldo.json";l.click()}
   }catch(x){falla(x)}
   render()});
 document.addEventListener("change",ev=>{const t=ev.target;
   if(t.dataset.sel==="pej"){S.pej=+t.value;render();return}
+  if(t.dataset.sn){S.sn[t.dataset.sn]=t.value;ls("gym_sueno",S.sn);render();return}
   if(!t.dataset.f)return;const sec=t.closest("[data-e]"),fila=t.closest("[data-i]");if(!sec||!fila)return;
   const s=S.draft[S.dia][+sec.dataset.e].series[+fila.dataset.i],f=t.dataset.f;
-  s[f]=f==="nota"?t.value:Math.max(0,parseFloat(String(t.value).replace(",","."))||0);guardarBorrador();render()});
+  s[f]=f==="nota"?t.value:Math.max(0,parseFloat(String(t.value).replace(",","."))||0);
+  if(f==="peso")s.orig={p:s.peso,u:(S.ej.find(x=>x.id===+sec.dataset.e)||{}).unidad};guardarBorrador();render()});
+document.addEventListener("input",ev=>{const t=ev.target;if(t.id!=="q")return;S.q=t.value;const l=$("listaEj");if(l)l.innerHTML=listaEj();const x=document.querySelector(".bx-x");if(x)x.hidden=!S.q});   // filtra en vivo sin redibujar la barra (no pierde el foco)
 
 /* ---------- arranque: primero lo guardado (instantáneo), luego se actualiza ---------- */
 $("formAcceso").onsubmit=ev=>{ev.preventDefault();S.clave=$("clave").value;localStorage.setItem("clave",S.clave);$("clave").value="";$("acceso").hidden=true;arrancar()};
 window.addEventListener("online",()=>{S.sinRed=false;refrescar()});
 window.addEventListener("offline",()=>{S.sinRed=true;render()});
 async function arrancar(){S.imgs=(await idbGet("imgs"))||{};const c=ls("gym_inicio");
-  if(c){S.ej=c.ej||[];S.ultimas=c.ultimas||{};S.alertas=c.alertas||[];S.pg=c.pg||null;S.ses=c.ses||null;render()}
+  if(c){S.ej=c.ej||[];S.ultimas=c.ultimas||{};S.alertas=c.alertas||[];S.pg=c.pg||null;S.ses=c.ses||null;S.prs=c.prs||{};S.desc=c.desc||null;S.aj=c.aj||{};render()}
   try{const est=await(await fetch("/api/estado")).json();if(est.requiere_clave&&!S.clave){$("acceso").hidden=false;return}}catch(e){}
   await refrescar();
   if(!S.ej.length)$("vista").innerHTML='<p class="cargando">Conéctate a internet una vez para descargar tu rutina.</p>'}

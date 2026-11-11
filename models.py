@@ -48,6 +48,7 @@ class Serie(Base):
     unidad = Column(String(3), nullable=False, default="kg")   # unidad usada ese día (el historial no cambia si luego la cambias)
     reps = Column(Integer, nullable=False)
     rir = Column(Integer, nullable=True)
+    rpe = Column(Float, nullable=True)                         # esfuerzo percibido 1-10 (se guarda junto al RIR: RPE ≈ 10 − RIR)
     nota = Column(String(200), nullable=False, default="")
 
 

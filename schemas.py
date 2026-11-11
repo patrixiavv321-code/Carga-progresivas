@@ -52,12 +52,15 @@ class SerieEntrada(BaseModel):
     peso: float = Field(ge=0, le=1500)
     reps: int = Field(ge=0, le=200)
     rir: Optional[int] = Field(default=None, ge=0, le=10)
+    rpe: Optional[float] = Field(default=None, ge=1, le=10)         # acepta medios puntos (8.5)
+    unidad: Optional[Unidad] = None                                # unidad en la que se escribió el peso (si no, la del ejercicio)
     nota: str = Field(default="", max_length=200)
 
 
 class SesionCrear(BaseModel):
     dia: int = Field(ge=1, le=3)
     fecha: Optional[date] = None
+    descarga: bool = False                                         # semana de descarga: no cuenta para alertas ni marcas
     cliente: Optional[str] = Field(default=None, max_length=40)
     series: List[SerieEntrada] = Field(min_length=1, max_length=300)
 
@@ -69,6 +72,7 @@ class SerieLeer(BaseModel):
     unidad: str
     reps: int
     rir: Optional[int]
+    rpe: Optional[float] = None
     nota: str
 
 
@@ -98,6 +102,7 @@ class SesionDetalle(BaseModel):
     resumen: Resumen
     ejercicios: List[ComparacionEjercicio]
     alertas: List[str] = []
+    descarga: bool = False
 
 
 class SesionResumen(BaseModel):
@@ -129,3 +134,10 @@ class Inicio(BaseModel):
     alertas: List[Alerta]
     progreso: dict                     # recuperación + recomendaciones + puntos para las gráficas
     sesiones: List[SesionResumen]
+    prs: dict = {}                     # récord histórico por ejercicio (peso máximo y mejor 1RM estimado)
+    descarga: dict = {}                # detector de descarga / estancamiento
+    ajustes: dict = {}
+
+
+class UnidadGlobal(BaseModel):
+    unidad: Unidad
