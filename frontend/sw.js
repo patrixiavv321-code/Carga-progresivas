@@ -1,6 +1,6 @@
 // Guarda la app en el teléfono para que abra al instante y funcione sin internet.
 // Los datos (/api) NO pasan por aquí: la app los guarda por su cuenta.
-const V = "gimnasio-v6";
+const V = "gimnasio-v7";
 const BASE = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", e => {

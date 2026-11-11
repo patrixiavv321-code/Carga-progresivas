@@ -188,9 +188,10 @@ const cola=()=>ls("gym_cola")||[];
 const S={clave:localStorage.getItem("clave")||"",vista:"entrenar",dia:+(ls("gym_dia")||1),ej:[],ultimas:{},alertas:[],pg:null,ses:null,draft:ls("gym_draft")||{},res:null,filtro:0,pdia:0,pej:0,imgs:{},sinRed:false,prs:{},desc:null,aj:{},q:"",escala:ls("gym_escala")||"RIR",guia:"descarga",gmodo:"volumen",gdia:0,sn:ls("gym_sueno")||{cur:"02:00",obj:"00:00",wake:"09:00"}};
 
 function aviso(t,tipo){const e=document.createElement("div");e.className="aviso "+(tipo||"");e.textContent=t;$("avisos").append(e);setTimeout(()=>e.remove(),3400)}
-async function api(ruta,op){op=op||{};let r;
-  try{r=await fetch("/api"+ruta,{method:op.method||"GET",headers:{"Content-Type":"application/json","X-Clave":S.clave},body:op.body?JSON.stringify(op.body):undefined})}
-  catch(e){const x=new Error("Sin conexión con el servidor.");x.red=true;throw x}
+async function api(ruta,op){op=op||{};let r;const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),op.timeout||40000);
+  try{r=await fetch("/api"+ruta,{signal:ctl.signal,method:op.method||"GET",headers:{"Content-Type":"application/json","X-Clave":S.clave},body:op.body?JSON.stringify(op.body):undefined})}
+  catch(e){clearTimeout(tm);const x=new Error("Sin conexión con el servidor.");x.red=true;throw x}
+  clearTimeout(tm);
   if(r.status===401){$("acceso").hidden=false;$("errorAcceso").textContent=S.clave?"Clave incorrecta":"";throw new Error("clave")}
   if(r.status===204)return null;const d=await r.json().catch(()=>({}));
   if(!r.ok){let m=d.detail;if(Array.isArray(m))m="Revisa los datos que escribiste.";throw new Error(m||"Algo salió mal.")}return d}
@@ -311,7 +312,7 @@ function vEntrenar(){if(!diasAct().includes(S.dia)){S.dia=diasAct()[0];ls("gym_d
   ${barraBuscar()}
   <p class="suave" style="margin-bottom:6px">${u.fecha?"Comparando con tu último "+DIAS[S.dia]+": "+fechaTxt(u.fecha):"Aún no tienes un entrenamiento de este día."}</p>
   <div id="listaEj">${listaEj()}</div>
-  ${lista.length?'<div class="fin"><button class="btn btn-pri" data-act="terminar">Terminar entrenamiento y comparar</button></div>':""}`}
+  ${lista.length?`<div class="fin"><button class="btn btn-pri" data-act="terminar"${S.guardando?" disabled":""}>${S.guardando?"Guardando…":"Terminar entrenamiento y comparar"}</button></div>`:""}`}
 const parseMarca=e=>{const r=[...String(e.marca||"").matchAll(/(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+)/gi)].map(m=>({peso:+m[1].replace(",","."),reps:+m[2],rir:null,unidad:e.unidad}));return r.length?r:null};
 let metaEd=null;
 function abrirMeta(e,auto){metaEd=e;$("mtMarca").value=e.marca||"";$("mtMarca").placeholder=auto||"";$("mtPrevio").value=e.referencia||"";$("mtError").textContent="";$("dlgMeta").showModal()}
@@ -352,6 +353,13 @@ function vHistorial(){
   ${l.length?`<div class="lista">${l.map(s=>`<button class="fila" data-act="abrir" data-id="${s.id}"><span><b>${DIAS[s.dia]}</b><br><small class="suave">${fechaTxt(s.fecha)} · ${s.num_ejercicios} ejercicios${s.nota?" · "+esc(s.nota):""}</small></span>
    <span style="text-align:right;font-weight:800" class="num"><span style="color:var(--verde-osc)">▲${s.resumen.mejoraron}</span> <span class="suave">＝${s.resumen.iguales}</span> <span style="color:var(--naranja)">▼${s.resumen.empeoraron}</span></span></button>`).join("")}</div>`:'<p class="cargando">Aún no hay entrenamientos aquí.</p>'}`}
 
+function listaDias(d){
+  const pend=cola().filter(q=>q.dia===d).map(q=>({cli:q.cliente,fecha:q.fecha,n:new Set(q.series.map(x=>x.ejercicio_id)).size,pend:true}));
+  const reg=(S.ses||[]).filter(s=>s.dia===d),todos=[...pend,...reg],cuenta={};
+  todos.forEach(s=>{cuenta[s.fecha]=(cuenta[s.fecha]||0)+1});
+  const fila=s=>{const R=s.resumen;return`<div class="fila" style="cursor:default;grid-template-columns:1fr auto;align-items:center"><span><b>${fechaTxt(s.fecha)}</b>${s.pend?' <span class="ins nuevo">Sin subir</span>':""}${cuenta[s.fecha]>1?' <span class="ins menos">Repetido</span>':""}${s.nota==="Marcas iniciales"?' <span class="ins ig">Marcas iniciales</span>':""}<br><small class="suave">${s.n??s.num_ejercicios} ejercicios${R?` · ▲${R.mejoraron} ＝${R.iguales} ▼${R.empeoraron}`:""}</small></span>
+   <button class="btn btn-peq btn-pel" data-act="${s.pend?"delcola":"delsesp"}" data-id="${s.pend?esc(s.cli):s.id}" data-fecha="${s.fecha}">Eliminar</button></div>`};
+  return todos.length?`<div class="lista" style="box-shadow:none;border:1px solid var(--linea)">${todos.slice(0,15).map(fila).join("")}</div>`:'<p class="suave">Todavía no hay entrenamientos de este día.</p>'}
 const TIPO={subir:["mas","↑ Sube"],mantener:["ig","= Mantén"],bajar:["menos","↓ Baja"],estancado:["menos","Estancado"],nuevo:["nuevo","Nuevo"]};
 function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termines un entrenamiento verás aquí tu progreso.</p>';
   const R=P.recuperacion,d=diasAct().includes(S.pdia||S.dia)?(S.pdia||S.dia):diasAct()[0],exs=P.ejercicios.filter(e=>e.dia===d),ind=R.indicadores||{};
@@ -367,6 +375,7 @@ function vProgreso(){const P=S.pg;if(!P)return'<p class="cargando">Cuando termin
   <section class="tarjeta"><h2 class="t2">¿Voy mejorando en ${DIAS[d]}?</h2>${apilado(ses)}
    <p class="suave expl">Cada barra es un entrenamiento. Compara cada ejercicio con la vez anterior: rojo si lo mejoraste (más peso o más repeticiones), gris oscuro si quedó igual y gris claro si bajó. Si con el tiempo ves más rojo, estás progresando.</p>
    ${reales.length?`<p style="margin-top:8px"><b>${M}</b> mejoras · <b>${I}</b> iguales · <b>${B}</b> bajadas en tus últimos ${reales.length} entrenamientos. ${tendencia}</p>`:`<p style="margin-top:8px">${tendencia}</p>`}</section>
+  <section class="tarjeta"><h2 class="t2">Entrenamientos registrados de ${DIAS[d]}</h2><p class="suave expl">Si un día quedó repetido o registrado por error (por ejemplo, con mala señal), elimínalo aquí y tu progreso se recalcula.</p>${listaDias(d)}</section>
   <section class="tarjeta"><h2 class="t2">Recomendaciones de carga</h2><p class="suave expl">Basadas en tus marcas: si llegas al tope de repeticiones (10 en los principales, 12 en los demás) o terminas con 2 o más repeticiones de reserva, es momento de subir ~5%.</p>
    ${recs.map(e=>{const r=e.recomendacion,t=TIPO[r.tipo]||TIPO.nuevo;return`<div class="recfila" data-e="${e.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(e.nombre)}</b><span class="ins ${t[0]}">${t[1]}</span></div>
     <p style="font-size:.9rem;margin-top:4px"><b>${esc(r.titulo)}.</b> ${esc(r.texto)}</p>${e.puntos.length?`<button class="enlace" data-act="verpg" data-id="${e.id}" style="font-size:.88rem">Ver gráfica</button>`:""}</div>`}).join("")||'<p class="suave">Sin ejercicios en este día.</p>'}</section>
@@ -562,16 +571,23 @@ function resultadoLocal(c){const pf=(S.ultimas[c.dia]||{}).fecha||null,prev=(S.u
   const n=v=>ejercicios.filter(x=>x.veredicto===v).length;
   if(!c.descarga)S.ultimas[c.dia]={fecha:c.fecha,ejercicios:por};
   return{id:0,fecha:c.fecha,dia:c.dia,previa_fecha:pf,resumen:{mejoraron:n("+"),iguales:n("="),empeoraron:n("-"),nuevos:n("nuevo")},ejercicios,alertas:[],local:true,descarga:!!c.descarga}}
-async function terminar(){const d=borrador(),series=[];
+const clis=()=>ls("gym_cli")||{};
+function clienteDe(dia){const m=clis();if(!m[dia]){m[dia]=uid();ls("gym_cli",m)}return m[dia]}      // mismo id si reintentas: el servidor no lo duplica
+function limpiarCliente(dia){const m=clis();delete m[dia];ls("gym_cli",Object.keys(m).length?m:null)}
+function yaRegistradoHoy(dia){const hoy=hoyCol();
+  return(S.ses||[]).some(s=>s.dia===dia&&s.fecha===hoy&&s.nota!=="Marcas iniciales")||cola().some(q=>q.dia===dia&&q.fecha===hoy)||(S.ultimas[dia]||{}).fecha===hoy}
+async function terminar(){if(S.guardando)return;const d=borrador(),series=[];
   const hechos=S.ej.filter(e=>e.dia===S.dia&&!d[e.id].omitir),nuevos=[];
   hechos.forEach(e=>{if(d[e.id].series.some(s=>superaPR(e,s)))nuevos.push(e.nombre);
     d[e.id].series.forEach(s=>{const r=real(e,s);series.push({ejercicio_id:e.id,peso:r.peso,unidad:r.unidad,reps:Math.round(+s.reps)||0,rir:s.rir??null,rpe:s.rpe??null,nota:s.nota||""})})});
   if(!series.length)return aviso("No hay series para guardar","error");
-  if(!confirm("¿Terminar y guardar este entrenamiento de "+DIAS[S.dia]+"?"))return;
-  const c={dia:S.dia,fecha:hoyCol(),cliente:uid(),series,descarga:!!(S.desc&&S.desc.nivel==="en_curso")};
-  try{S.res=await api("/sesiones",{method:"POST",body:c});S.res.prsNuevos=nuevos;S.sinRed=false;delete S.draft[S.dia];guardarBorrador();scrollTo(0,0);render();refrescar()}
-  catch(e){if(!e.red)return falla(e);
-    ls("gym_cola",[...cola(),c]);S.sinRed=true;S.res=resultadoLocal(c);S.res.prsNuevos=nuevos;hechos.forEach(e=>actualizarPR(e,d[e.id].series));delete S.draft[S.dia];guardarBorrador();guardarCache();scrollTo(0,0);render()}}
+  const msg=yaRegistradoHoy(S.dia)?"Hoy ya registraste "+DIAS[S.dia]+".\n\n¿Para qué quieres agregar la misma rutina dos veces? ¿Estás seguro?":"¿Terminar y guardar este entrenamiento de "+DIAS[S.dia]+"?";
+  if(!confirm(msg))return;
+  const c={dia:S.dia,fecha:hoyCol(),cliente:clienteDe(S.dia),series,descarga:!!(S.desc&&S.desc.nivel==="en_curso")};
+  S.guardando=true;render();
+  try{S.res=await api("/sesiones",{method:"POST",body:c,timeout:45000});S.res.prsNuevos=nuevos;S.sinRed=false;limpiarCliente(c.dia);delete S.draft[S.dia];guardarBorrador();S.guardando=false;scrollTo(0,0);render();refrescar()}
+  catch(e){S.guardando=false;if(!e.red){render();return falla(e)}
+    ls("gym_cola",[...cola().filter(q=>q.cliente!==c.cliente),c]);limpiarCliente(c.dia);S.sinRed=true;S.res=resultadoLocal(c);S.res.prsNuevos=nuevos;hechos.forEach(e=>actualizarPR(e,d[e.id].series));delete S.draft[S.dia];guardarBorrador();guardarCache();scrollTo(0,0);render()}}
 async function irHistorial(){S.vista="historial";S.res=null;render();try{S.ses=await api("/sesiones");guardarCache();render()}catch(e){if(!S.ses)falla(e)}}
 
 document.addEventListener("click",async ev=>{
@@ -598,7 +614,13 @@ document.addEventListener("click",async ev=>{
   else if(a==="foto"){fotoDe=e.id;$("archivo").click();return}
   else if(a==="filtro"){S.filtro=+t.dataset.n}
   else if(a==="abrir"){S.res=await api("/sesiones/"+t.dataset.id)}
-  else if(a==="delses"){if(!confirm("¿Eliminar este entrenamiento? No se puede deshacer."))return;await api("/sesiones/"+t.dataset.id,{method:"DELETE"});S.res=null;await refrescar();S.ses=await api("/sesiones")}
+  else if(a==="delses"){if(!confirm("¿Estás seguro de eliminar este entrenamiento? No se puede deshacer."))return;await api("/sesiones/"+t.dataset.id,{method:"DELETE"});S.res=null;await refrescar();S.ses=await api("/sesiones")}
+  else if(a==="delsesp"){const id=+t.dataset.id,s=(S.ses||[]).find(x=>x.id===id),base=s&&s.nota==="Marcas iniciales";
+    if(!confirm("¿Estás seguro de eliminar el entrenamiento de "+(s?DIAS[s.dia]+" del "+fechaTxt(s.fecha):"este día")+"?\n\nSe quita de tu progreso y no se puede deshacer."+(base?"\n\nEstas son tus marcas iniciales: la primera comparación se hará contra el siguiente entrenamiento.":"")))return;
+    await api("/sesiones/"+id,{method:"DELETE"});S.ses=(S.ses||[]).filter(x=>x.id!==id);aviso("Entrenamiento eliminado");await refrescar()}
+  else if(a==="delcola"){const cli=t.dataset.id;
+    if(!confirm("¿Estás seguro de eliminar este entrenamiento que aún no se ha subido? Se borra de tu teléfono y no se puede deshacer."))return;
+    const q=cola().filter(x=>x.cliente!==cli);ls("gym_cola",q.length?q:null);aviso("Entrenamiento eliminado");await refrescar()}
   else if(a==="nuevoej"){return abrirEj()}
   else if(a==="editar"){return abrirEj(e)}
   else if(a==="borrar"){if(!confirm("¿Quitar "+e.nombre+" de tu rutina? Tu historial se conserva."))return;await api("/ejercicios/"+e.id,{method:"DELETE"});S.ej=S.ej.filter(x=>x!==e);guardarCache();refrescar()}
